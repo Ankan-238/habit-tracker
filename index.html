@@ -289,6 +289,12 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
         }
 
         .habit-item::before {
@@ -681,7 +687,7 @@
         <footer class="footer">
             <div class="footer-content">
                 <p class="footer-tagline">⚡ Track. Complete. Level Up. ⚡</p>
-                <p class="footer-text">More features dropping soon. Stay tuned for the next quest!</p>
+                <p class="footer-text">More features & enhancements dropping soon. Stay tuned for the next quest!</p>
                 <p class="footer-connect">
                     Built with focus and flow • Connect on 
                     <a href="https://www.linkedin.com/in/ankan-hore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -865,12 +871,31 @@
             }
 
             container.innerHTML = habits.map((habit, index) => `
-                <div class="habit-item ${habit.completed ? 'completed' : ''}" onclick="toggleHabit(${index})">
+                <div class="habit-item ${habit.completed ? 'completed' : ''}" data-index="${index}">
                     <div class="habit-checkbox"></div>
                     <div class="habit-name">${escapeHtml(habit.name)}</div>
-                    <button class="habit-delete" onclick="deleteHabit(event, ${index})">✕</button>
+                    <button class="habit-delete" data-index="${index}">✕</button>
                 </div>
             `).join('');
+
+            // Add event listeners for touch/click
+            container.querySelectorAll('.habit-item').forEach((item) => {
+                const index = parseInt(item.dataset.index);
+                item.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('habit-delete')) {
+                        toggleHabit(index);
+                    }
+                });
+            });
+
+            // Add delete button listeners
+            container.querySelectorAll('.habit-delete').forEach((btn) => {
+                const index = parseInt(btn.dataset.index);
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteHabit(index);
+                });
+            });
 
             updateStats();
         }
@@ -896,8 +921,7 @@
         }
 
         // Delete habit
-        function deleteHabit(event, index) {
-            event.stopPropagation();
+        function deleteHabit(index) {
             if (confirm('Delete this habit?')) {
                 habits.splice(index, 1);
                 saveData();
