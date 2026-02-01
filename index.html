@@ -881,8 +881,18 @@
             // Add event listeners for touch/click
             container.querySelectorAll('.habit-item').forEach((item) => {
                 const index = parseInt(item.dataset.index);
-                item.addEventListener('click', (e) => {
+                
+                // Use touchstart for mobile (fires immediately)
+                item.addEventListener('touchstart', (e) => {
                     if (!e.target.classList.contains('habit-delete')) {
+                        e.preventDefault(); // Prevent ghost clicks
+                        toggleHabit(index);
+                    }
+                }, { passive: false });
+                
+                // Keep click for desktop
+                item.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('habit-delete') && e.type === 'click') {
                         toggleHabit(index);
                     }
                 });
@@ -891,6 +901,13 @@
             // Add delete button listeners
             container.querySelectorAll('.habit-delete').forEach((btn) => {
                 const index = parseInt(btn.dataset.index);
+                
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    deleteHabit(index);
+                }, { passive: false });
+                
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     deleteHabit(index);
