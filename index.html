@@ -403,25 +403,10 @@
             text-decoration: line-through;
         }
 
-        .habit-delete {
-            background: transparent;
-            border: none;
-            color: var(--text-dim);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            opacity: 0;
-            font-size: 1.2rem;
-        }
-
-        .habit-item:hover .habit-delete {
-            opacity: 1;
-        }
-
-        .habit-delete:hover {
-            background: rgba(255, 0, 128, 0.1);
-            color: var(--accent-secondary);
+        .habit-actions {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
         }
 
         .habit-edit {
@@ -445,10 +430,25 @@
             color: var(--accent-primary);
         }
 
-        .habit-actions {
-            display: flex;
-            gap: 4px;
-            margin-left: auto;
+        .habit-delete {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            font-size: 1.2rem;
+        }
+
+        .habit-item:hover .habit-delete {
+            opacity: 1;
+        }
+
+        .habit-delete:hover {
+            background: rgba(255, 0, 128, 0.1);
+            color: var(--accent-secondary);
         }
 
         .habit-name-input {
@@ -489,33 +489,6 @@
         .reset-day {
             margin-top: 30px;
             text-align: center;
-        }
-
-        @media (max-width: 500px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-value {
-                font-size: 2rem;
-            }
-        }
-
-        .pulse {
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.6;
-            }
         }
 
         .weekly-section {
@@ -907,6 +880,19 @@
                 font-size: 0.6rem;
             }
         }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1023,7 +1009,7 @@
         let editingIndex = null;
         let backfillDate = null;
         let backfillSelections = [];
-        let streakThreshold = 80; // Default threshold
+        let streakThreshold = 80;
 
         // Load and save best streak
         function loadBestStreak() {
@@ -1064,12 +1050,8 @@
                 if (stored) {
                     const data = JSON.parse(stored);
                     
-                    // Check if it's a new day
                     if (data.date !== currentDate) {
-                        // Save yesterday's completion before resetting
                         saveWeeklyData(data.date, data.habits);
-                        
-                        // New day - reset completion status but keep habits
                         habits = data.habits.map(h => ({ name: h.name, completed: false }));
                         saveData();
                     } else {
@@ -1089,8 +1071,6 @@
                     habits: habits
                 };
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-                
-                // Also update weekly data for today
                 saveWeeklyData(currentDate, habits);
             } catch (e) {
                 console.error('Error saving data:', e);
@@ -1116,7 +1096,6 @@
                     total: total
                 };
                 
-                // Keep only last 30 days of data
                 const dates = Object.keys(weeklyData);
                 if (dates.length > 30) {
                     dates.sort((a, b) => new Date(a) - new Date(b));
@@ -1146,7 +1125,6 @@
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             
-            let savedBestStreak = loadBestStreak();
             let currentStreak = 0;
             let maxStreak = 0;
             let tempStreak = 0;
@@ -1180,10 +1158,9 @@
                 }
             }
             
-          // Always use the maximum streak found in current data
-                const bestStreak = maxStreak;
-                saveBestStreak(bestStreak);
-            }
+            // Always recalculate from current data (allows decrease when backfilling)
+            const bestStreak = maxStreak;
+            saveBestStreak(bestStreak);
             
             return { currentStreak, bestStreak };
         }
@@ -1195,7 +1172,6 @@
             document.getElementById('currentStreak').textContent = currentStreak;
             document.getElementById('bestStreak').textContent = bestStreak;
             
-            // Update subtitle based on streak
             const subtitle = document.getElementById('streakSubtitle');
             if (currentStreak === 0) {
                 subtitle.textContent = 'Start your streak!';
@@ -1204,48 +1180,6 @@
             } else {
                 subtitle.textContent = 'days - on fire! 🔥';
             }
-        }
-
-        // Render weekly summary
-        function renderWeeklySummary() {
-            const container = document.getElementById('weeklyGrid');
-            const weeklyData = getWeeklyData();
-            const backfillData = getBackfillData();
-            const today = new Date();
-            
-            // Get last 7 days
-            const days = [];
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date(today);
-                date.setDate(date.getDate() - i);
-                days.push(date);
-            }
-            
-            container.innerHTML = days.map(date => {
-                const dateStr = date.toDateString();
-                const data = weeklyData[dateStr];
-                const percentage = data ? data.percentage : 0;
-                const isToday = dateStr === currentDate;
-                const isPast = date < today && !isToday;
-                const hasData = data && data.total > 0;
-                const isBackfilled = backfillData[dateStr] !== undefined;
-                const meetsThreshold = percentage >= streakThreshold;
-                
-                const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
-                const dayDate = date.getDate();
-                
-                let className = 'week-day';
-                if (isToday) className += ' today';
-                if (hasData && meetsThreshold) className += ' completed';
-                
-                return `
-                    <div class="${className}" data-date="${dateStr}" data-past="${isPast}" ${isPast ? 'onclick="openBackfillModal(\'' + dateStr + '\')"' : ''}>
-                        <div class="week-day-name">${dayName}${isBackfilled ? ' ⚡' : ''}</div>
-                        <div class="week-day-percent">${percentage}%</div>
-                        <div class="week-day-date">${dayDate}</div>
-                    </div>
-                `;
-            }).join('');
         }
 
         // Update date display
@@ -1278,7 +1212,6 @@
             document.getElementById('missedCount').textContent = missed;
             document.getElementById('progressText').textContent = percentage + '%';
 
-            // Update progress ring
             const circle = document.getElementById('progressCircle');
             const radius = 52;
             const circumference = 2 * Math.PI * radius;
@@ -1287,11 +1220,49 @@
             circle.style.strokeDasharray = circumference;
             circle.style.strokeDashoffset = offset;
             
-            // Update weekly summary when stats change
             renderWeeklySummary();
-            
-            // Update streak display
             updateStreakDisplay();
+        }
+
+        // Render weekly summary
+        function renderWeeklySummary() {
+            const container = document.getElementById('weeklyGrid');
+            const weeklyData = getWeeklyData();
+            const backfillData = getBackfillData();
+            const today = new Date();
+            
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                days.push(date);
+            }
+            
+            container.innerHTML = days.map(date => {
+                const dateStr = date.toDateString();
+                const data = weeklyData[dateStr];
+                const percentage = data ? data.percentage : 0;
+                const isToday = dateStr === currentDate;
+                const isPast = date < today && !isToday;
+                const hasData = data && data.total > 0;
+                const isBackfilled = backfillData[dateStr] !== undefined;
+                const meetsThreshold = percentage >= streakThreshold;
+                
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+                const dayDate = date.getDate();
+                
+                let className = 'week-day';
+                if (isToday) className += ' today';
+                if (hasData && meetsThreshold) className += ' completed';
+                
+                return `
+                    <div class="${className}" data-date="${dateStr}" data-past="${isPast}" ${isPast ? 'onclick="openBackfillModal(\'' + dateStr + '\')"' : ''}>
+                        <div class="week-day-name">${dayName}${isBackfilled ? ' ⚡' : ''}</div>
+                        <div class="week-day-percent">${percentage}%</div>
+                        <div class="week-day-date">${dayDate}</div>
+                    </div>
+                `;
+            }).join('');
         }
 
         // Render habits list
@@ -1330,7 +1301,7 @@
                 `;
             }).join('');
 
-            // Add event listeners for toggle (only if not editing)
+            // Add event listeners
             container.querySelectorAll('.habit-item').forEach((item) => {
                 const index = parseInt(item.dataset.index);
                 const isEditing = editingIndex === index;
@@ -1397,7 +1368,7 @@
                 });
             });
 
-            // Add input listeners for Enter key and blur
+            // Add input listeners
             container.querySelectorAll('.habit-name-input').forEach((input) => {
                 const index = parseInt(input.dataset.index);
                 
@@ -1412,7 +1383,6 @@
                     saveEditHabit(index);
                 });
                 
-                // Auto-focus the input
                 setTimeout(() => input.focus(), 0);
             });
 
@@ -1469,7 +1439,7 @@
             renderHabits();
         }
 
-        // Reset day (for testing or manual reset)
+        // Reset day
         function resetDay() {
             if (confirm('Reset all habits for today? This will uncheck all completed habits.')) {
                 habits = habits.map(h => ({ ...h, completed: false }));
@@ -1478,27 +1448,19 @@
             }
         }
 
-        // Escape HTML to prevent XSS
+        // Escape HTML
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
-        // Handle Enter key in input
+        // Handle Enter key
         document.getElementById('habitInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 addHabit();
             }
         });
-
-        // Initialize app
-        updateDateDisplay();
-        loadStreakThreshold();
-        loadData();
-        renderHabits();
-        renderWeeklySummary();
-        updateStreakDisplay();
 
         // Backfill functions
         function getBackfillData() {
@@ -1522,7 +1484,7 @@
         }
 
         function openBackfillModal(dateStr) {
-            if (dateStr === currentDate) return; // Can't backfill today
+            if (dateStr === currentDate) return;
             
             backfillDate = dateStr;
             backfillSelections = [];
@@ -1537,11 +1499,9 @@
             
             document.getElementById('backfillTitle').textContent = `Backfill - ${formattedDate}`;
             
-            // Get existing backfill data for this date
             const backfillData = getBackfillData();
             const existingData = backfillData[dateStr] || [];
             
-            // Render habits with current selections
             const container = document.getElementById('backfillHabits');
             container.innerHTML = habits.map((habit, index) => {
                 const isSelected = existingData.includes(habit.name);
@@ -1580,13 +1540,9 @@
         function saveBackfill() {
             if (!backfillDate) return;
             
-            // Get habit names for selected indices
             const selectedHabits = backfillSelections.map(index => habits[index].name);
-            
-            // Save backfill data
             saveBackfillData(backfillDate, selectedHabits);
             
-            // Update weekly data
             const completed = backfillSelections.length;
             const total = habits.length;
             const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -1604,12 +1560,19 @@
             updateStreakDisplay();
         }
 
-        // Close modal when clicking outside
         document.getElementById('backfillModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeBackfillModal();
             }
         });
+
+        // Initialize app
+        updateDateDisplay();
+        loadStreakThreshold();
+        loadData();
+        renderHabits();
+        renderWeeklySummary();
+        updateStreakDisplay();
     </script>
 </body>
 </html>
