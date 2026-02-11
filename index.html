@@ -1180,8 +1180,8 @@
                 }
             }
             
-            const bestStreak = Math.max(savedBestStreak, maxStreak);
-            if (bestStreak > savedBestStreak) {
+          // Always use the maximum streak found in current data
+                const bestStreak = maxStreak;
                 saveBestStreak(bestStreak);
             }
             
