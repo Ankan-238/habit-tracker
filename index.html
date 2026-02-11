@@ -380,6 +380,7 @@
             border-radius: 8px;
             transition: all 0.3s ease;
             opacity: 0;
+            font-size: 1.2rem;
         }
 
         .habit-item:hover .habit-delete {
@@ -389,6 +390,47 @@
         .habit-delete:hover {
             background: rgba(255, 0, 128, 0.1);
             color: var(--accent-secondary);
+        }
+
+        .habit-edit {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            font-size: 1rem;
+        }
+
+        .habit-item:hover .habit-edit {
+            opacity: 1;
+        }
+
+        .habit-edit:hover {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .habit-actions {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .habit-name-input {
+            flex: 1;
+            background: var(--bg-dark);
+            border: 2px solid var(--accent-primary);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
         }
 
         .empty-state {
@@ -687,7 +729,7 @@
         <footer class="footer">
             <div class="footer-content">
                 <p class="footer-tagline">⚡ Track. Complete. Level Up. ⚡</p>
-                <p class="footer-text">More features dropping soon. Stay tuned for the next quest!</p>
+                <p class="footer-text">More features & enhancements dropping soon. Stay tuned for the next quest!</p>
                 <p class="footer-connect">
                     Built with focus and flow • Connect on 
                     <a href="https://www.linkedin.com/in/ankan-hore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -702,6 +744,7 @@
         
         let habits = [];
         let currentDate = new Date().toDateString();
+        let editingIndex = null;
 
         // Load data from localStorage
         function loadData() {
@@ -870,30 +913,74 @@
                 return;
             }
 
-            container.innerHTML = habits.map((habit, index) => `
-                <div class="habit-item ${habit.completed ? 'completed' : ''}" data-index="${index}">
-                    <div class="habit-checkbox"></div>
-                    <div class="habit-name">${escapeHtml(habit.name)}</div>
-                    <button class="habit-delete" data-index="${index}">✕</button>
-                </div>
-            `).join('');
+            container.innerHTML = habits.map((habit, index) => {
+                const isEditing = editingIndex === index;
+                
+                return `
+                    <div class="habit-item ${habit.completed ? 'completed' : ''}" data-index="${index}">
+                        <div class="habit-checkbox"></div>
+                        ${isEditing 
+                            ? `<input type="text" class="habit-name-input" data-index="${index}" value="${escapeHtml(habit.name)}" maxlength="50">`
+                            : `<div class="habit-name">${escapeHtml(habit.name)}</div>`
+                        }
+                        <div class="habit-actions">
+                            ${isEditing 
+                                ? `<button class="habit-edit" data-index="${index}" data-action="save">✓</button>`
+                                : `<button class="habit-edit" data-index="${index}" data-action="edit">✎</button>`
+                            }
+                            <button class="habit-delete" data-index="${index}">✕</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
 
-            // Add event listeners for touch/click
+            // Add event listeners for toggle (only if not editing)
             container.querySelectorAll('.habit-item').forEach((item) => {
                 const index = parseInt(item.dataset.index);
+                const isEditing = editingIndex === index;
                 
-                // Use touchstart for mobile (fires immediately)
-                item.addEventListener('touchstart', (e) => {
-                    if (!e.target.classList.contains('habit-delete')) {
-                        e.preventDefault(); // Prevent ghost clicks
-                        toggleHabit(index);
+                if (!isEditing) {
+                    item.addEventListener('touchstart', (e) => {
+                        if (!e.target.classList.contains('habit-delete') && 
+                            !e.target.classList.contains('habit-edit') &&
+                            !e.target.closest('.habit-actions')) {
+                            e.preventDefault();
+                            toggleHabit(index);
+                        }
+                    }, { passive: false });
+                    
+                    item.addEventListener('click', (e) => {
+                        if (!e.target.classList.contains('habit-delete') && 
+                            !e.target.classList.contains('habit-edit') &&
+                            !e.target.closest('.habit-actions') &&
+                            e.type === 'click') {
+                            toggleHabit(index);
+                        }
+                    });
+                }
+            });
+
+            // Add edit button listeners
+            container.querySelectorAll('.habit-edit').forEach((btn) => {
+                const index = parseInt(btn.dataset.index);
+                const action = btn.dataset.action;
+                
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (action === 'edit') {
+                        startEditHabit(index);
+                    } else {
+                        saveEditHabit(index);
                     }
                 }, { passive: false });
                 
-                // Keep click for desktop
-                item.addEventListener('click', (e) => {
-                    if (!e.target.classList.contains('habit-delete') && e.type === 'click') {
-                        toggleHabit(index);
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (action === 'edit') {
+                        startEditHabit(index);
+                    } else {
+                        saveEditHabit(index);
                     }
                 });
             });
@@ -912,6 +999,25 @@
                     e.stopPropagation();
                     deleteHabit(index);
                 });
+            });
+
+            // Add input listeners for Enter key and blur
+            container.querySelectorAll('.habit-name-input').forEach((input) => {
+                const index = parseInt(input.dataset.index);
+                
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        saveEditHabit(index);
+                    }
+                });
+                
+                input.addEventListener('blur', () => {
+                    saveEditHabit(index);
+                });
+                
+                // Auto-focus the input
+                setTimeout(() => input.focus(), 0);
             });
 
             updateStats();
@@ -941,9 +1047,30 @@
         function deleteHabit(index) {
             if (confirm('Delete this habit?')) {
                 habits.splice(index, 1);
+                editingIndex = null;
                 saveData();
                 renderHabits();
             }
+        }
+
+        // Start editing a habit
+        function startEditHabit(index) {
+            editingIndex = index;
+            renderHabits();
+        }
+
+        // Save edited habit
+        function saveEditHabit(index) {
+            const input = document.querySelector(`.habit-name-input[data-index="${index}"]`);
+            if (input) {
+                const newName = input.value.trim();
+                if (newName && newName !== habits[index].name) {
+                    habits[index].name = newName;
+                    saveData();
+                }
+            }
+            editingIndex = null;
+            renderHabits();
         }
 
         // Reset day (for testing or manual reset)
