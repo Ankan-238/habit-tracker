@@ -152,6 +152,38 @@
             background-clip: text;
         }
 
+        .stat-value.streak {
+            background: linear-gradient(135deg, #ff6b00, var(--accent-warning));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+        }
+
+        .streak-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .streak-card::after {
+            content: '🔥';
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+            font-size: 4rem;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .streak-subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
         .progress-ring {
             width: 120px;
             height: 120px;
@@ -491,6 +523,43 @@
             animation: fadeIn 0.8s ease-out 0.5s both;
         }
 
+        .streak-settings {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .streak-settings label {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .streak-settings select {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            color: var(--text-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .streak-settings select:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .streak-settings select:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
+        }
+
         .weekly-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -507,6 +576,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .week-day::before {
@@ -638,6 +708,171 @@
             width: 100%;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-primary);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 0, 128, 0.1);
+            color: var(--accent-secondary);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-description {
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .backfill-habits {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .backfill-habit-item {
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .backfill-habit-item:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .backfill-habit-item.selected {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .backfill-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            background: var(--bg-card);
+        }
+
+        .backfill-habit-item.selected .backfill-checkbox {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .backfill-checkbox::after {
+            content: '✓';
+            color: var(--bg-dark);
+            font-weight: 900;
+            font-size: 1rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .backfill-habit-item.selected .backfill-checkbox::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .backfill-habit-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-footer .btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 500px) {
             h1 {
                 font-size: 2rem;
@@ -706,6 +941,16 @@
                 <div class="stat-label">Missed</div>
                 <div class="stat-value warning" id="missedCount">0</div>
             </div>
+            <div class="stat-card streak-card">
+                <div class="stat-label">🔥 Current Streak</div>
+                <div class="stat-value streak" id="currentStreak">0</div>
+                <div class="streak-subtitle" id="streakSubtitle">days</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">📈 Best Streak</div>
+                <div class="stat-value streak" id="bestStreak">0</div>
+                <div class="streak-subtitle">days</div>
+            </div>
         </div>
 
         <div class="habits-section">
@@ -723,6 +968,16 @@
 
         <div class="weekly-section">
             <h2 class="section-title">Weekly Progress</h2>
+            <div class="streak-settings">
+                <label for="streakThreshold">Streak Goal: </label>
+                <select id="streakThreshold" onchange="updateStreakThreshold()">
+                    <option value="50">50%+ completion</option>
+                    <option value="70">70%+ completion</option>
+                    <option value="80" selected>80%+ completion</option>
+                    <option value="90">90%+ completion</option>
+                    <option value="100">100% completion</option>
+                </select>
+            </div>
             <div class="weekly-grid" id="weeklyGrid"></div>
         </div>
 
@@ -738,13 +993,69 @@
         </footer>
     </div>
 
+    <!-- Backfill Modal -->
+    <div id="backfillModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="backfillTitle">Backfill Data</h3>
+                <button class="modal-close" onclick="closeBackfillModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Select which habits you completed on this day:</p>
+                <div id="backfillHabits" class="backfill-habits"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeBackfillModal()">Cancel</button>
+                <button class="btn" onclick="saveBackfill()">Save</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const STORAGE_KEY = 'habit-tracker-data';
         const WEEKLY_KEY = 'habit-tracker-weekly';
+        const BACKFILL_KEY = 'habit-tracker-backfill';
+        const STREAK_KEY = 'habit-tracker-streak-threshold';
+        const BEST_STREAK_KEY = 'habit-tracker-best-streak';
         
         let habits = [];
         let currentDate = new Date().toDateString();
         let editingIndex = null;
+        let backfillDate = null;
+        let backfillSelections = [];
+        let streakThreshold = 80; // Default threshold
+
+        // Load and save best streak
+        function loadBestStreak() {
+            try {
+                const stored = localStorage.getItem(BEST_STREAK_KEY);
+                return stored ? parseInt(stored) : 0;
+            } catch (e) {
+                console.error('Error loading best streak:', e);
+                return 0;
+            }
+        }
+
+        function saveBestStreak(streak) {
+            try {
+                localStorage.setItem(BEST_STREAK_KEY, streak.toString());
+            } catch (e) {
+                console.error('Error saving best streak:', e);
+            }
+        }
+
+        // Load streak threshold
+        function loadStreakThreshold() {
+            try {
+                const stored = localStorage.getItem(STREAK_KEY);
+                if (stored) {
+                    streakThreshold = parseInt(stored);
+                    document.getElementById('streakThreshold').value = streakThreshold;
+                }
+            } catch (e) {
+                console.error('Error loading streak threshold:', e);
+            }
+        }
 
         // Load data from localStorage
         function loadData() {
@@ -829,10 +1140,77 @@
             }
         }
 
+        // Calculate streaks
+        function calculateStreaks() {
+            const weeklyData = getWeeklyData();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            let savedBestStreak = loadBestStreak();
+            let currentStreak = 0;
+            let maxStreak = 0;
+            let tempStreak = 0;
+            
+            // Go through last 365 days forward in time to find best streak
+            for (let i = 364; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toDateString();
+                const data = weeklyData[dateStr];
+                
+                if (data && data.percentage >= streakThreshold) {
+                    tempStreak++;
+                    maxStreak = Math.max(maxStreak, tempStreak);
+                } else {
+                    tempStreak = 0;
+                }
+            }
+            
+            // Calculate current streak from today backwards
+            for (let i = 0; i < 365; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toDateString();
+                const data = weeklyData[dateStr];
+                
+                if (data && data.percentage >= streakThreshold) {
+                    currentStreak++;
+                } else {
+                    break;
+                }
+            }
+            
+            const bestStreak = Math.max(savedBestStreak, maxStreak);
+            if (bestStreak > savedBestStreak) {
+                saveBestStreak(bestStreak);
+            }
+            
+            return { currentStreak, bestStreak };
+        }
+
+        // Update streak display
+        function updateStreakDisplay() {
+            const { currentStreak, bestStreak } = calculateStreaks();
+            
+            document.getElementById('currentStreak').textContent = currentStreak;
+            document.getElementById('bestStreak').textContent = bestStreak;
+            
+            // Update subtitle based on streak
+            const subtitle = document.getElementById('streakSubtitle');
+            if (currentStreak === 0) {
+                subtitle.textContent = 'Start your streak!';
+            } else if (currentStreak === 1) {
+                subtitle.textContent = 'day - keep going!';
+            } else {
+                subtitle.textContent = 'days - on fire! 🔥';
+            }
+        }
+
         // Render weekly summary
         function renderWeeklySummary() {
             const container = document.getElementById('weeklyGrid');
             const weeklyData = getWeeklyData();
+            const backfillData = getBackfillData();
             const today = new Date();
             
             // Get last 7 days
@@ -848,18 +1226,21 @@
                 const data = weeklyData[dateStr];
                 const percentage = data ? data.percentage : 0;
                 const isToday = dateStr === currentDate;
+                const isPast = date < today && !isToday;
                 const hasData = data && data.total > 0;
+                const isBackfilled = backfillData[dateStr] !== undefined;
+                const meetsThreshold = percentage >= streakThreshold;
                 
                 const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
                 const dayDate = date.getDate();
                 
                 let className = 'week-day';
                 if (isToday) className += ' today';
-                if (hasData && percentage >= 80) className += ' completed';
+                if (hasData && meetsThreshold) className += ' completed';
                 
                 return `
-                    <div class="${className}">
-                        <div class="week-day-name">${dayName}</div>
+                    <div class="${className}" data-date="${dateStr}" data-past="${isPast}" ${isPast ? 'onclick="openBackfillModal(\'' + dateStr + '\')"' : ''}>
+                        <div class="week-day-name">${dayName}${isBackfilled ? ' ⚡' : ''}</div>
                         <div class="week-day-percent">${percentage}%</div>
                         <div class="week-day-date">${dayDate}</div>
                     </div>
@@ -872,6 +1253,18 @@
             const date = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('dateDisplay').textContent = date.toLocaleDateString('en-US', options);
+        }
+
+        // Update streak threshold
+        function updateStreakThreshold() {
+            streakThreshold = parseInt(document.getElementById('streakThreshold').value);
+            try {
+                localStorage.setItem(STREAK_KEY, streakThreshold);
+            } catch (e) {
+                console.error('Error saving streak threshold:', e);
+            }
+            updateStreakDisplay();
+            renderWeeklySummary();
         }
 
         // Update statistics and progress ring
@@ -896,6 +1289,9 @@
             
             // Update weekly summary when stats change
             renderWeeklySummary();
+            
+            // Update streak display
+            updateStreakDisplay();
         }
 
         // Render habits list
@@ -1098,9 +1494,122 @@
 
         // Initialize app
         updateDateDisplay();
+        loadStreakThreshold();
         loadData();
         renderHabits();
         renderWeeklySummary();
+        updateStreakDisplay();
+
+        // Backfill functions
+        function getBackfillData() {
+            try {
+                const stored = localStorage.getItem(BACKFILL_KEY);
+                return stored ? JSON.parse(stored) : {};
+            } catch (e) {
+                console.error('Error loading backfill data:', e);
+                return {};
+            }
+        }
+
+        function saveBackfillData(dateStr, habitNames) {
+            try {
+                let backfillData = getBackfillData();
+                backfillData[dateStr] = habitNames;
+                localStorage.setItem(BACKFILL_KEY, JSON.stringify(backfillData));
+            } catch (e) {
+                console.error('Error saving backfill data:', e);
+            }
+        }
+
+        function openBackfillModal(dateStr) {
+            if (dateStr === currentDate) return; // Can't backfill today
+            
+            backfillDate = dateStr;
+            backfillSelections = [];
+            
+            const date = new Date(dateStr);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('backfillTitle').textContent = `Backfill - ${formattedDate}`;
+            
+            // Get existing backfill data for this date
+            const backfillData = getBackfillData();
+            const existingData = backfillData[dateStr] || [];
+            
+            // Render habits with current selections
+            const container = document.getElementById('backfillHabits');
+            container.innerHTML = habits.map((habit, index) => {
+                const isSelected = existingData.includes(habit.name);
+                if (isSelected) backfillSelections.push(index);
+                
+                return `
+                    <div class="backfill-habit-item ${isSelected ? 'selected' : ''}" data-index="${index}" onclick="toggleBackfillHabit(${index})">
+                        <div class="backfill-checkbox"></div>
+                        <div class="backfill-habit-name">${escapeHtml(habit.name)}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('backfillModal').classList.add('active');
+        }
+
+        function closeBackfillModal() {
+            document.getElementById('backfillModal').classList.remove('active');
+            backfillDate = null;
+            backfillSelections = [];
+        }
+
+        function toggleBackfillHabit(index) {
+            const item = document.querySelector(`.backfill-habit-item[data-index="${index}"]`);
+            const selectionIndex = backfillSelections.indexOf(index);
+            
+            if (selectionIndex > -1) {
+                backfillSelections.splice(selectionIndex, 1);
+                item.classList.remove('selected');
+            } else {
+                backfillSelections.push(index);
+                item.classList.add('selected');
+            }
+        }
+
+        function saveBackfill() {
+            if (!backfillDate) return;
+            
+            // Get habit names for selected indices
+            const selectedHabits = backfillSelections.map(index => habits[index].name);
+            
+            // Save backfill data
+            saveBackfillData(backfillDate, selectedHabits);
+            
+            // Update weekly data
+            const completed = backfillSelections.length;
+            const total = habits.length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            
+            let weeklyData = getWeeklyData();
+            weeklyData[backfillDate] = {
+                percentage: percentage,
+                completed: completed,
+                total: total
+            };
+            localStorage.setItem(WEEKLY_KEY, JSON.stringify(weeklyData));
+            
+            closeBackfillModal();
+            renderWeeklySummary();
+            updateStreakDisplay();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('backfillModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBackfillModal();
+            }
+        });
     </script>
 </body>
 </html>
