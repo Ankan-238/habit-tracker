@@ -37,6 +37,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
+            position: relative;
         }
 
         header {
@@ -221,6 +222,69 @@
             text-align: center;
         }
 
+        .calendar-icon-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            animation: fadeIn 0.8s ease-out 0.25s both;
+        }
+
+        .calendar-icon-btn:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .calendar-icon-btn:active {
+            transform: translateY(0);
+        }
+
+        .calendar-tooltip {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-dark);
+            color: var(--accent-primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid var(--accent-primary);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
+        }
+
+        /* Show tooltip on hover (desktop) */
+        .calendar-icon-btn:hover .calendar-tooltip {
+            opacity: 1;
+        }
+
+        /* Show tooltip on touch/tap (mobile) */
+        .calendar-icon-btn:active .calendar-tooltip {
+            opacity: 1;
+        }
+
+        .calendar-toggle-btn {
+            font-size: 0.95rem;
+            padding: 10px 24px;
+        }
+
         .habits-section {
             animation: fadeIn 0.8s ease-out 0.4s both;
         }
@@ -238,6 +302,47 @@
         .section-title::before {
             content: '▸';
             color: var(--accent-primary);
+        }
+
+        .collapsible-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+            padding: 12px;
+            margin: -12px;
+            border-radius: 12px;
+        }
+
+        .collapsible-header:hover {
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .collapsible-header::before {
+            content: '';
+        }
+
+        .collapse-icon {
+            color: var(--accent-primary);
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .collapse-icon.open {
+            transform: rotate(90deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+        }
+
+        .collapsible-content.open {
+            max-height: 2000px;
+            opacity: 1;
+            transition: max-height 0.5s ease-in, opacity 0.3s ease-in;
         }
 
         .habit-input {
@@ -618,6 +723,317 @@
             margin-top: 4px;
         }
 
+        .habit-stats-section {
+            margin-top: 50px;
+            animation: fadeIn 0.8s ease-out 0.6s both;
+        }
+
+        .stats-period-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .period-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 20px;
+            color: var(--text-dim);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .period-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .period-btn.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--bg-dark);
+            font-weight: 700;
+        }
+
+        .habit-stat-item {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .habit-stat-item:hover {
+            border-color: var(--accent-primary);
+            transform: translateX(4px);
+        }
+
+        .habit-stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .habit-stat-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .habit-stat-percentage {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-primary), #00ddff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .habit-stat-percentage.low {
+            background: linear-gradient(135deg, var(--accent-secondary), #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .habit-stat-bar-container {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            height: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .habit-stat-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), #00ddff);
+            border-radius: 8px;
+            transition: width 0.6s ease;
+            position: relative;
+        }
+
+        .habit-stat-bar.low {
+            background: linear-gradient(90deg, var(--accent-secondary), #ff6b00);
+        }
+
+        .habit-stat-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .habit-stat-count {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .no-stats {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .stats-trophy {
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 1.2rem;
+        }
+
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .calendar-nav-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-nav-btn:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .calendar-month-year {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+        }
+
+        .calendar-legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid var(--border);
+        }
+
+        .legend-goal {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .legend-partial {
+            background: var(--accent-warning);
+            border-color: var(--accent-warning);
+        }
+
+        .legend-missed {
+            background: var(--bg-card);
+            border-color: var(--border);
+        }
+
+        #calendarGrid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day-header {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            text-align: center;
+            padding: 10px 4px;
+            letter-spacing: 1px;
+        }
+
+        .calendar-day {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+            border: none;
+            cursor: default;
+        }
+
+        .calendar-day.empty:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .calendar-day.today {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .calendar-day.goal-hit {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: var(--accent-primary);
+        }
+
+        .calendar-day.goal-hit::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+        }
+
+        .calendar-day.partial {
+            background: rgba(255, 217, 0, 0.1);
+            border-color: var(--accent-warning);
+        }
+
+        .calendar-day-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .calendar-day-percentage {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+
+        .calendar-day.goal-hit .calendar-day-percentage {
+            color: var(--accent-primary);
+            font-weight: 700;
+        }
+
+        .calendar-day.partial .calendar-day-percentage {
+            color: var(--accent-warning);
+        }
+
+        .calendar-day.future {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .calendar-day.future:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
         .footer {
             margin-top: 60px;
             padding-top: 40px;
@@ -710,6 +1126,10 @@
             overflow-y: auto;
             box-shadow: 0 20px 60px rgba(0, 255, 136, 0.3);
             animation: slideUp 0.3s ease-out;
+        }
+
+        .modal-content-wide {
+            max-width: 700px;
         }
 
         @keyframes slideUp {
@@ -851,6 +1271,14 @@
                 font-size: 2rem;
             }
 
+            .calendar-icon-btn {
+                top: 10px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
@@ -904,6 +1332,11 @@
 
         <div class="date-display" id="dateDisplay"></div>
 
+        <button class="calendar-icon-btn" onclick="openCalendarModal()" aria-label="View Calendar">
+            📅
+            <span class="calendar-tooltip">View Calendar</span>
+        </button>
+
         <div class="progress-ring">
             <svg width="120" height="120">
                 <defs>
@@ -953,18 +1386,38 @@
         </div>
 
         <div class="weekly-section">
-            <h2 class="section-title">Weekly Progress</h2>
-            <div class="streak-settings">
-                <label for="streakThreshold">Streak Goal: </label>
-                <select id="streakThreshold" onchange="updateStreakThreshold()">
-                    <option value="50">50%+ completion</option>
-                    <option value="70">70%+ completion</option>
-                    <option value="80" selected>80%+ completion</option>
-                    <option value="90">90%+ completion</option>
-                    <option value="100">100% completion</option>
-                </select>
+            <h2 class="section-title collapsible-header" onclick="toggleSection('weeklySection')">
+                <span class="collapse-icon" id="weeklyIcon">▸</span>
+                Weekly Progress
+            </h2>
+            <div class="collapsible-content" id="weeklySection">
+                <div class="streak-settings">
+                    <label for="streakThreshold">Streak Goal: </label>
+                    <select id="streakThreshold" onchange="updateStreakThreshold()">
+                        <option value="50">50%+ completion</option>
+                        <option value="70">70%+ completion</option>
+                        <option value="80" selected>80%+ completion</option>
+                        <option value="90">90%+ completion</option>
+                        <option value="100">100% completion</option>
+                    </select>
+                </div>
+                <div class="weekly-grid" id="weeklyGrid"></div>
             </div>
-            <div class="weekly-grid" id="weeklyGrid"></div>
+        </div>
+
+        <div class="habit-stats-section">
+            <h2 class="section-title collapsible-header" onclick="toggleSection('habitStatsSection')">
+                <span class="collapse-icon" id="habitStatsIcon">▸</span>
+                Habit Performance
+            </h2>
+            <div class="collapsible-content" id="habitStatsSection">
+                <div class="stats-period-selector">
+                    <button class="period-btn active" data-period="7" onclick="changeStatsPeriod(7)">7 Days</button>
+                    <button class="period-btn" data-period="30" onclick="changeStatsPeriod(30)">30 Days</button>
+                    <button class="period-btn" data-period="90" onclick="changeStatsPeriod(90)">90 Days</button>
+                </div>
+                <div id="habitStatsContainer"></div>
+            </div>
         </div>
 
         <footer class="footer">
@@ -997,12 +1450,45 @@
         </div>
     </div>
 
+    <!-- Calendar Modal -->
+    <div id="calendarModal" class="modal">
+        <div class="modal-content modal-content-wide">
+            <div class="modal-header">
+                <h3>Monthly Calendar</h3>
+                <button class="modal-close" onclick="closeCalendarModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="calendar-controls">
+                    <button class="calendar-nav-btn" onclick="changeMonth(-1)">‹</button>
+                    <div class="calendar-month-year" id="calendarMonthYear"></div>
+                    <button class="calendar-nav-btn" onclick="changeMonth(1)">›</button>
+                </div>
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <div class="legend-color legend-goal"></div>
+                        <span>Goal Hit</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-partial"></div>
+                        <span>Partial</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-missed"></div>
+                        <span>No Data</span>
+                    </div>
+                </div>
+                <div id="calendarGrid"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const STORAGE_KEY = 'habit-tracker-data';
         const WEEKLY_KEY = 'habit-tracker-weekly';
         const BACKFILL_KEY = 'habit-tracker-backfill';
         const STREAK_KEY = 'habit-tracker-streak-threshold';
         const BEST_STREAK_KEY = 'habit-tracker-best-streak';
+        const HABIT_HISTORY_KEY = 'habit-tracker-habit-history';
         
         let habits = [];
         let currentDate = new Date().toDateString();
@@ -1010,6 +1496,9 @@
         let backfillDate = null;
         let backfillSelections = [];
         let streakThreshold = 80;
+        let statsPeriod = 7; // Default 7 days
+        let calendarMonth = new Date().getMonth(); // 0-11
+        let calendarYear = new Date().getFullYear();
 
         // Load and save best streak
         function loadBestStreak() {
@@ -1072,8 +1561,49 @@
                 };
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
                 saveWeeklyData(currentDate, habits);
+                saveHabitHistory(currentDate, habits);
             } catch (e) {
                 console.error('Error saving data:', e);
+            }
+        }
+
+        // Save habit history for stats
+        function saveHabitHistory(date, habitsData) {
+            try {
+                let history = {};
+                const stored = localStorage.getItem(HABIT_HISTORY_KEY);
+                if (stored) {
+                    history = JSON.parse(stored);
+                }
+                
+                // Store which habits were completed on this date
+                const completedHabits = habitsData
+                    .filter(h => h.completed)
+                    .map(h => h.name);
+                
+                history[date] = completedHabits;
+                
+                // Keep only last 90 days
+                const dates = Object.keys(history);
+                if (dates.length > 90) {
+                    dates.sort((a, b) => new Date(a) - new Date(b));
+                    dates.slice(0, dates.length - 90).forEach(d => delete history[d]);
+                }
+                
+                localStorage.setItem(HABIT_HISTORY_KEY, JSON.stringify(history));
+            } catch (e) {
+                console.error('Error saving habit history:', e);
+            }
+        }
+
+        // Get habit history
+        function getHabitHistory() {
+            try {
+                const stored = localStorage.getItem(HABIT_HISTORY_KEY);
+                return stored ? JSON.parse(stored) : {};
+            } catch (e) {
+                console.error('Error loading habit history:', e);
+                return {};
             }
         }
 
@@ -1199,6 +1729,7 @@
             }
             updateStreakDisplay();
             renderWeeklySummary();
+            // Calendar will update legend automatically when opened
         }
 
         // Update statistics and progress ring
@@ -1387,6 +1918,7 @@
             });
 
             updateStats();
+            renderHabitStats();
         }
 
         // Add new habit
@@ -1462,6 +1994,221 @@
             }
         });
 
+        // Toggle collapsible sections
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const icon = document.getElementById(sectionId.replace('Section', 'Icon'));
+            
+            if (section.classList.contains('open')) {
+                section.classList.remove('open');
+                icon.classList.remove('open');
+            } else {
+                section.classList.add('open');
+                icon.classList.add('open');
+            }
+        }
+
+        // Change stats period
+        function changeStatsPeriod(days) {
+            statsPeriod = days;
+            
+            // Update button states
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                if (parseInt(btn.dataset.period) === days) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            renderHabitStats();
+        }
+
+        // Change calendar month
+        function changeMonth(delta) {
+            calendarMonth += delta;
+            
+            if (calendarMonth > 11) {
+                calendarMonth = 0;
+                calendarYear++;
+            } else if (calendarMonth < 0) {
+                calendarMonth = 11;
+                calendarYear--;
+            }
+            
+            renderCalendar();
+        }
+
+        // Render monthly calendar
+        function renderCalendar() {
+            const weeklyData = getWeeklyData();
+            const today = new Date();
+            const currentMonthYear = new Date(calendarYear, calendarMonth, 1);
+            
+            // Update month/year display
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('calendarMonthYear').textContent = 
+                `${monthNames[calendarMonth]} ${calendarYear}`;
+            
+            // Update legend
+            const legendText = document.querySelector('.calendar-legend .legend-item:first-child span');
+            if (legendText) {
+                legendText.textContent = `Goal Hit (${streakThreshold}%+)`;
+            }
+            
+            const firstDay = new Date(calendarYear, calendarMonth, 1);
+            const lastDay = new Date(calendarYear, calendarMonth + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay(); // 0 = Sunday
+            
+            const container = document.getElementById('calendarGrid');
+            let html = '';
+            
+            // Day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                html += `<div class="calendar-day-header">${day}</div>`;
+            });
+            
+            // Empty cells before first day
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                html += '<div class="calendar-day empty"></div>';
+            }
+            
+            // Days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(calendarYear, calendarMonth, day);
+                const dateStr = date.toDateString();
+                const data = weeklyData[dateStr];
+                const percentage = data ? data.percentage : 0;
+                
+                const isToday = dateStr === today.toDateString();
+                const isFuture = date > today;
+                const isGoalHit = percentage >= streakThreshold;
+                const isPartial = percentage > 0 && percentage < streakThreshold;
+                
+                let classes = 'calendar-day';
+                if (isToday) classes += ' today';
+                if (isFuture) classes += ' future';
+                else if (isGoalHit) classes += ' goal-hit';
+                else if (isPartial) classes += ' partial';
+                
+                const clickHandler = !isFuture && !isToday ? `onclick="openBackfillModal('${dateStr}')"` : '';
+                
+                html += `
+                    <div class="${classes}" ${clickHandler}>
+                        <div class="calendar-day-number">${day}</div>
+                        ${!isFuture && data ? `<div class="calendar-day-percentage">${percentage}%</div>` : ''}
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        // Calculate habit statistics
+        function calculateHabitStats() {
+            const history = getHabitHistory();
+            const backfillData = getBackfillData();
+            const today = new Date();
+            
+            // Get current habit names
+            const currentHabits = habits.map(h => h.name);
+            const habitStats = {};
+            
+            // Initialize stats for current habits
+            currentHabits.forEach(habitName => {
+                habitStats[habitName] = {
+                    completed: 0,
+                    total: 0,
+                    percentage: 0
+                };
+            });
+            
+            // Go through the selected period
+            for (let i = 0; i < statsPeriod; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toDateString();
+                
+                // Get completed habits from history
+                const completedOnDate = history[dateStr] || [];
+                
+                // Also check backfill data
+                const backfilledHabits = backfillData[dateStr] || [];
+                
+                // Combine both sources
+                const allCompletedOnDate = [...new Set([...completedOnDate, ...backfilledHabits])];
+                
+                // Count for each current habit
+                currentHabits.forEach(habitName => {
+                    if (habitStats[habitName]) {
+                        habitStats[habitName].total++;
+                        if (allCompletedOnDate.includes(habitName)) {
+                            habitStats[habitName].completed++;
+                        }
+                    }
+                });
+            }
+            
+            // Calculate percentages
+            Object.keys(habitStats).forEach(habitName => {
+                const stat = habitStats[habitName];
+                if (stat.total > 0) {
+                    stat.percentage = Math.round((stat.completed / stat.total) * 100);
+                }
+            });
+            
+            return habitStats;
+        }
+
+        // Render habit statistics
+        function renderHabitStats() {
+            const container = document.getElementById('habitStatsContainer');
+            
+            if (habits.length === 0) {
+                container.innerHTML = '<div class="no-stats">Add some habits to see performance stats!</div>';
+                return;
+            }
+            
+            const stats = calculateHabitStats();
+            
+            // Sort by percentage (descending)
+            const sortedHabits = Object.entries(stats).sort((a, b) => b[1].percentage - a[1].percentage);
+            
+            if (sortedHabits.length === 0) {
+                container.innerHTML = '<div class="no-stats">Start tracking to see your habit performance!</div>';
+                return;
+            }
+            
+            // Find best and worst performers
+            const bestPercentage = sortedHabits[0][1].percentage;
+            const worstPercentage = sortedHabits[sortedHabits.length - 1][1].percentage;
+            
+            container.innerHTML = sortedHabits.map(([habitName, stat], index) => {
+                const isBest = stat.percentage === bestPercentage && stat.percentage > 0;
+                const isLow = stat.percentage < 50;
+                const trophy = isBest && sortedHabits.length > 1 ? '<span class="stats-trophy">🏆</span>' : '';
+                
+                return `
+                    <div class="habit-stat-item">
+                        <div class="habit-stat-header">
+                            <div class="habit-stat-name">${escapeHtml(habitName)}${trophy}</div>
+                            <div class="habit-stat-percentage ${isLow ? 'low' : ''}">${stat.percentage}%</div>
+                        </div>
+                        <div class="habit-stat-bar-container">
+                            <div class="habit-stat-bar ${isLow ? 'low' : ''}" style="width: ${stat.percentage}%"></div>
+                        </div>
+                        <div class="habit-stat-details">
+                            <span class="habit-stat-count">${stat.completed} of ${stat.total} days</span>
+                            <span class="habit-stat-count">${stat.total - stat.completed} missed</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         // Backfill functions
         function getBackfillData() {
             try {
@@ -1485,6 +2232,9 @@
 
         function openBackfillModal(dateStr) {
             if (dateStr === currentDate) return;
+            
+            // Close calendar modal if open
+            closeCalendarModal();
             
             backfillDate = dateStr;
             backfillSelections = [];
@@ -1524,6 +2274,18 @@
             backfillSelections = [];
         }
 
+        function openCalendarModal() {
+            // Reset to current month when opening
+            calendarMonth = new Date().getMonth();
+            calendarYear = new Date().getFullYear();
+            renderCalendar();
+            document.getElementById('calendarModal').classList.add('active');
+        }
+
+        function closeCalendarModal() {
+            document.getElementById('calendarModal').classList.remove('active');
+        }
+
         function toggleBackfillHabit(index) {
             const item = document.querySelector(`.backfill-habit-item[data-index="${index}"]`);
             const selectionIndex = backfillSelections.indexOf(index);
@@ -1555,14 +2317,27 @@
             };
             localStorage.setItem(WEEKLY_KEY, JSON.stringify(weeklyData));
             
+            // Also save to habit history for stats
+            let history = getHabitHistory();
+            history[backfillDate] = selectedHabits;
+            localStorage.setItem(HABIT_HISTORY_KEY, JSON.stringify(history));
+            
             closeBackfillModal();
             renderWeeklySummary();
             updateStreakDisplay();
+            renderHabitStats();
+            // Calendar will refresh when reopened
         }
 
         document.getElementById('backfillModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeBackfillModal();
+            }
+        });
+
+        document.getElementById('calendarModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCalendarModal();
             }
         });
 
@@ -1573,6 +2348,15 @@
         renderHabits();
         renderWeeklySummary();
         updateStreakDisplay();
+        renderHabitStats();
+        
+        // Update calendar legend with current threshold
+        function updateCalendarLegend() {
+            const legendText = document.querySelector('.calendar-legend .legend-item:first-child span');
+            if (legendText) {
+                legendText.textContent = `Goal Hit (${streakThreshold}%+)`;
+            }
+        }
     </script>
 </body>
 </html>
