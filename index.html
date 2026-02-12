@@ -1038,6 +1038,109 @@
             box-shadow: none;
         }
 
+        .readme-modal {
+            max-height: 90vh;
+        }
+
+        .readme-content {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .readme-section {
+            margin-bottom: 30px;
+        }
+
+        .readme-section h4 {
+            color: var(--accent-primary);
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .readme-section p {
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .readme-section ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .readme-section li {
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .readme-section strong {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .readme-section em {
+            color: var(--accent-secondary);
+            font-style: italic;
+        }
+
+        .tech-stack {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .tech-item {
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tech-item:last-child {
+            border-bottom: none;
+        }
+
+        .tech-note {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .research-links li {
+            margin-bottom: 12px;
+        }
+
+        .research-links a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .research-links a:hover {
+            color: #00ddff;
+            text-decoration: underline;
+        }
+
+        .readme-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .readme-footer p {
+            margin-bottom: 10px;
+        }
+
+        .readme-tagline {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
         .footer {
             margin-top: 60px;
             padding-top: 40px;
@@ -1487,6 +1590,8 @@
                     <a href="https://x.com/This_is_Ankan" target="_blank" rel="noopener noreferrer">X</a>
                     <span class="footer-separator">•</span>
                     <a href="mailto:ankanhore238@gmail.com">Email</a>
+                    <span class="footer-separator">•</span>
+                    <a href="#" onclick="openReadmeModal(); return false;">📖 README</a>
                 </p>
             </div>
         </footer>
@@ -1538,6 +1643,157 @@
                     </div>
                 </div>
                 <div id="calendarGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- README Modal -->
+    <div id="readmeModal" class="modal">
+        <div class="modal-content modal-content-wide readme-modal">
+            <div class="modal-header">
+                <h3>📖 Daily Quest Tracker - README</h3>
+                <button class="modal-close" onclick="closeReadmeModal()">✕</button>
+            </div>
+            <div class="modal-body readme-content">
+                <section class="readme-section">
+                    <h4>🎯 What is Daily Quest Tracker?</h4>
+                    <p>Daily Quest Tracker is a gamified habit tracking application designed to help individuals build and maintain positive habits through consistent daily tracking, visual feedback, and achievement systems. It transforms the mundane task of habit tracking into an engaging, game-like experience.</p>
+                </section>
+
+                <section class="readme-section">
+                    <h4>💡 Why We Built This</h4>
+                    <p>Research consistently shows that habit tracking is one of the most effective tools for behavior change:</p>
+                    <ul>
+                        <li><strong>Accountability:</strong> The simple act of tracking makes you 42% more likely to achieve your goals (American Psychological Association)</li>
+                        <li><strong>Visual Progress:</strong> Seeing streaks and completion rates activates dopamine pathways, reinforcing positive behavior</li>
+                        <li><strong>Self-Awareness:</strong> Tracking reveals patterns in behavior that would otherwise go unnoticed</li>
+                        <li><strong>Motivation:</strong> Gamification elements (streaks, percentages, achievements) tap into our intrinsic motivation systems</li>
+                    </ul>
+                    <p>We built this to solve the common problem: <em>habit tracking apps are either too complex or too boring.</em> Daily Quest Tracker strikes the perfect balance between simplicity and engagement.</p>
+                </section>
+
+                <section class="readme-section">
+                    <h4>👥 Who Is This For?</h4>
+                    <ul>
+                        <li><strong>Students:</strong> Building study routines, exercise habits, and skill development</li>
+                        <li><strong>Professionals:</strong> Maintaining work-life balance, productivity rituals, and career growth habits</li>
+                        <li><strong>Entrepreneurs:</strong> Tracking business-building activities, networking, and personal development</li>
+                        <li><strong>Health Enthusiasts:</strong> Fitness routines, meditation, nutrition tracking, sleep hygiene</li>
+                        <li><strong>Anyone seeking self-improvement:</strong> Building better versions of themselves, one day at a time</li>
+                    </ul>
+                </section>
+
+                <section class="readme-section">
+                    <h4>🛠️ Tech Stack</h4>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <strong>Frontend:</strong> Pure HTML5, CSS3, Vanilla JavaScript (ES6+)
+                        </div>
+                        <div class="tech-item">
+                            <strong>Storage:</strong> Browser localStorage API for persistent data
+                        </div>
+                        <div class="tech-item">
+                            <strong>Design:</strong> Custom CSS with CSS Grid, Flexbox, and CSS animations
+                        </div>
+                        <div class="tech-item">
+                            <strong>Fonts:</strong> Google Fonts (Outfit, Space Mono)
+                        </div>
+                        <div class="tech-item">
+                            <strong>Architecture:</strong> Single-page application (SPA) with modular JavaScript functions
+                        </div>
+                        <div class="tech-item">
+                            <strong>Hosting:</strong> GitHub Pages (static hosting, free and fast)
+                        </div>
+                    </div>
+                    <p class="tech-note"><strong>Why this stack?</strong> Zero dependencies, maximum performance, works offline, no build tools required, easy to maintain and extend.</p>
+                </section>
+
+                <section class="readme-section">
+                    <h4>🎮 Key Features</h4>
+                    <ul>
+                        <li>✅ <strong>Daily Habit Tracking:</strong> Add, edit, and check off habits with one tap</li>
+                        <li>📊 <strong>Visual Progress:</strong> Circular progress ring shows daily completion</li>
+                        <li>🔥 <strong>Streak Tracking:</strong> Current and best streak with customizable goals (50%-100%)</li>
+                        <li>📅 <strong>Monthly Calendar:</strong> Visual overview of your entire month's performance</li>
+                        <li>📈 <strong>Habit Analytics:</strong> Performance stats over 7/30/90 day periods</li>
+                        <li>⚡ <strong>Backfill Capability:</strong> Fill in missed days retroactively</li>
+                        <li>📱 <strong>Mobile-First:</strong> Optimized for phone usage with touch interactions</li>
+                        <li>💾 <strong>Persistent Data:</strong> All data saved locally, no account required</li>
+                        <li>🎨 <strong>Gamified UX:</strong> Achievements, trophies, and visual rewards</li>
+                    </ul>
+                </section>
+
+                <section class="readme-section">
+                    <h4>📈 Impact of Regular Usage</h4>
+                    <p>Consistent use of habit tracking tools like Daily Quest Tracker has been shown to:</p>
+                    <ul>
+                        <li><strong>Increase Success Rate:</strong> People who track habits are 2-3x more likely to stick with them long-term</li>
+                        <li><strong>Build Self-Discipline:</strong> The practice of daily tracking strengthens executive function and willpower</li>
+                        <li><strong>Create Compound Growth:</strong> Small daily improvements (1% better) compound to 37x improvement over a year</li>
+                        <li><strong>Reduce Decision Fatigue:</strong> Automated tracking eliminates the mental burden of "did I do it?"</li>
+                        <li><strong>Boost Motivation:</strong> Seeing progress creates momentum and positive feedback loops</li>
+                        <li><strong>Improve Self-Awareness:</strong> Understanding patterns helps identify triggers and optimize routines</li>
+                    </ul>
+                </section>
+
+                <section class="readme-section">
+                    <h4>📚 Research & Further Reading</h4>
+                    <ul class="research-links">
+                        <li>📄 <a href="https://jamesclear.com/habit-tracker" target="_blank" rel="noopener noreferrer">The Science of Habit Tracking - James Clear</a></li>
+                        <li>📄 <a href="https://www.psychologytoday.com/us/blog/what-matters-most/202001/the-science-behind-habit-tracking" target="_blank" rel="noopener noreferrer">The Science Behind Habit Tracking - Psychology Today</a></li>
+                        <li>📄 <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6524446/" target="_blank" rel="noopener noreferrer">Self-Monitoring and Habit Formation - NCBI Research</a></li>
+                        <li>📄 <a href="https://hbr.org/2021/02/how-to-actually-stick-with-your-goals-this-year" target="_blank" rel="noopener noreferrer">How to Stick with Your Goals - Harvard Business Review</a></li>
+                        <li>📖 <strong>Book:</strong> "Atomic Habits" by James Clear - The definitive guide to habit formation</li>
+                        <li>📖 <strong>Book:</strong> "The Power of Habit" by Charles Duhigg - Understanding the neuroscience of habits</li>
+                    </ul>
+                </section>
+
+                <section class="readme-section">
+                    <h4>🚀 Future Roadmap</h4>
+                    <ul>
+                        <li>📊 Historical charts and trend analysis</li>
+                        <li>🏆 Achievement badges and milestone celebrations</li>
+                        <li>📤 Export data (CSV, JSON) for external analysis</li>
+                        <li>🔗 Social features (optional sharing, accountability partners)</li>
+                        <li>🎨 Custom themes and personalization</li>
+                        <li>📱 Progressive Web App (PWA) for offline-first experience</li>
+                        <li>🔔 Optional reminders and notifications</li>
+                        <li>🤝 Multi-user sync (optional cloud backup)</li>
+                    </ul>
+                </section>
+
+                <section class="readme-section">
+                    <h4>🤝 For Investors, Cofounders & Collaborators</h4>
+                    <p><strong>Market Opportunity:</strong> The habit tracking and productivity app market is projected to reach $5.8B by 2027, growing at 13.4% CAGR.</p>
+                    <p><strong>Competitive Advantages:</strong></p>
+                    <ul>
+                        <li>Zero friction onboarding (no signup required)</li>
+                        <li>Privacy-first (all data local, no servers)</li>
+                        <li>Lightweight and fast (works on any device)</li>
+                        <li>Unique gamification approach (quest-based metaphor)</li>
+                        <li>Open-source potential (community-driven development)</li>
+                    </ul>
+                    <p><strong>Monetization Potential:</strong> Freemium model, premium analytics, team/enterprise licenses, habit coaching integration, API for third-party apps.</p>
+                    <p><strong>Interested in collaborating?</strong> Reach out via the contact links in the footer.</p>
+                </section>
+
+                <section class="readme-section">
+                    <h4>📝 License & Contributing</h4>
+                    <p>Daily Quest Tracker is currently a personal project by <strong>Ankan Hore</strong>. The codebase demonstrates best practices in:</p>
+                    <ul>
+                        <li>Clean, modular JavaScript architecture</li>
+                        <li>Responsive, mobile-first CSS design</li>
+                        <li>User-centric UX/UI design</li>
+                        <li>Progressive enhancement principles</li>
+                        <li>Accessibility considerations</li>
+                    </ul>
+                    <p>This project is available for review, learning, and potential collaboration opportunities.</p>
+                </section>
+
+                <div class="readme-footer">
+                    <p><strong>Built with ❤️ and ☕ by Ankan Hore</strong></p>
+                    <p class="readme-tagline">"We are what we repeatedly do. Excellence, then, is not an act, but a habit." - Aristotle</p>
+                </div>
             </div>
         </div>
     </div>
@@ -2346,6 +2602,14 @@
             document.getElementById('calendarModal').classList.remove('active');
         }
 
+        function openReadmeModal() {
+            document.getElementById('readmeModal').classList.add('active');
+        }
+
+        function closeReadmeModal() {
+            document.getElementById('readmeModal').classList.remove('active');
+        }
+
         function toggleBackfillHabit(index) {
             const item = document.querySelector(`.backfill-habit-item[data-index="${index}"]`);
             const selectionIndex = backfillSelections.indexOf(index);
@@ -2398,6 +2662,12 @@
         document.getElementById('calendarModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeCalendarModal();
+            }
+        });
+
+        document.getElementById('readmeModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeReadmeModal();
             }
         });
 
