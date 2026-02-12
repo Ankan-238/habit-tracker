@@ -1204,6 +1204,46 @@
             width: 100%;
         }
 
+        .footer-social {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+        }
+
+        .footer-social a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .footer-social a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: #00ddff;
+        }
+
+        .footer-social a:hover::after {
+            width: 100%;
+        }
+
+        .footer-separator {
+            margin: 0 8px;
+            color: var(--text-dim);
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -1584,14 +1624,16 @@
                 <p class="footer-tagline">⚡ Track. Complete. Level Up. ⚡</p>
                 <p class="footer-text">More features & enhancements dropping soon. Stay tuned for the next quest!</p>
                 <p class="footer-connect">
-                    Built with focus and flow • Connect on 
+                    Built with focus and flow • 
+                    <a href="#" onclick="openReadmeModal(); return false;">📖 README</a>
+                </p>
+                <p class="footer-social">
+                    Connect on 
                     <a href="https://www.linkedin.com/in/ankan-hore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     <span class="footer-separator">•</span>
                     <a href="https://x.com/This_is_Ankan" target="_blank" rel="noopener noreferrer">X</a>
                     <span class="footer-separator">•</span>
                     <a href="mailto:ankanhore238@gmail.com">Email</a>
-                    <span class="footer-separator">•</span>
-                    <a href="#" onclick="openReadmeModal(); return false;">📖 README</a>
                 </p>
             </div>
         </footer>
