@@ -377,6 +377,49 @@
             color: var(--text-dim);
         }
 
+        .habit-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .suggestion-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 5px;
+        }
+
+        .suggestion-chip {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .suggestion-chip:hover {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .suggestion-chip:active {
+            transform: translateY(0);
+        }
+
         .btn {
             background: linear-gradient(135deg, var(--accent-primary), #00ddff);
             border: none;
@@ -1083,6 +1126,41 @@
             font-style: italic;
         }
 
+        .app-preview {
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .preview-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .preview-section strong {
+            color: var(--accent-primary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .preview-section ul {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+
+        .preview-section li {
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
         .tech-stack {
             background: var(--bg-dark);
             border: 1px solid var(--border);
@@ -1429,6 +1507,17 @@
                 font-size: 1.3rem;
             }
 
+            .suggestion-chip {
+                font-size: 0.8rem;
+                padding: 5px 12px;
+            }
+
+            .suggestion-label {
+                font-size: 0.7rem;
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
             .modal-content-wide {
                 max-width: 95%;
                 width: 95%;
@@ -1577,6 +1666,19 @@
                 <input type="text" id="habitInput" placeholder="Add a new habit..." maxlength="50">
                 <button class="btn" onclick="addHabit()">Add</button>
             </div>
+            <div class="habit-suggestions" id="habitSuggestions">
+                <span class="suggestion-label">Quick add:</span>
+                <button class="suggestion-chip" onclick="addSuggestion('Read')">📚 Read</button>
+                <button class="suggestion-chip" onclick="addSuggestion('Journal')">✍️ Journal</button>
+                <button class="suggestion-chip" onclick="addSuggestion('Workout')">💪 Workout</button>
+                <button class="suggestion-chip" onclick="addSuggestion('Meditate')">🧘 Meditate</button>
+                <button class="suggestion-chip" onclick="addSuggestion('Swim')">🏊 Swim</button>
+                <button class="suggestion-chip" onclick="addSuggestion('Walk')">🚶 Walk</button>
+                <button class="suggestion-chip" onclick="addSuggestion('Water (8 glasses)')">💧 Water</button>
+                <button class="suggestion-chip" onclick="addSuggestion('Sleep 8hrs')">😴 Sleep</button>
+                <button class="suggestion-chip" onclick="addSuggestion('No Sugar')">🚫 No Sugar</button>
+                <button class="suggestion-chip" onclick="addSuggestion('Learn')">🎓 Learn</button>
+            </div>
             <div class="habits-list" id="habitsList"></div>
         </div>
 
@@ -1703,6 +1805,63 @@
                 </section>
 
                 <section class="readme-section">
+                    <h4>📱 App Interface Preview</h4>
+                    <div class="app-preview">
+                        <div class="preview-section">
+                            <strong>🎨 Main Dashboard:</strong>
+                            <ul>
+                                <li><strong>Header:</strong> "Daily Quest Tracker" with gradient text effect and tagline</li>
+                                <li><strong>Date Display:</strong> Current date in full format (Thursday, February 13, 2026)</li>
+                                <li><strong>Progress Ring:</strong> Circular animated progress indicator showing daily completion percentage</li>
+                                <li><strong>Calendar Button:</strong> Quick access to monthly calendar view (📅 icon)</li>
+                            </ul>
+                        </div>
+                        <div class="preview-section">
+                            <strong>📊 Stats Dashboard (4 cards):</strong>
+                            <ul>
+                                <li><strong>Completed:</strong> Number of habits checked off today</li>
+                                <li><strong>Missed:</strong> Number of habits not completed (yellow)</li>
+                                <li><strong>🔥 Current Streak:</strong> Consecutive days hitting your goal</li>
+                                <li><strong>📈 Best Streak:</strong> Your all-time record</li>
+                            </ul>
+                        </div>
+                        <div class="preview-section">
+                            <strong>✅ Today's Quests Section:</strong>
+                            <ul>
+                                <li><strong>Input Field:</strong> Add custom habits with text input</li>
+                                <li><strong>Quick Add Chips:</strong> Pre-made suggestions (Read, Journal, Workout, Meditate, etc.)</li>
+                                <li><strong>Habit List:</strong> Interactive checklist with checkboxes, edit (✎) and delete (✕) buttons</li>
+                                <li><strong>Visual Feedback:</strong> Green highlight on completion, strikethrough text</li>
+                            </ul>
+                        </div>
+                        <div class="preview-section">
+                            <strong>📊 Collapsible Sections (tap to expand):</strong>
+                            <ul>
+                                <li><strong>▸ Weekly Progress:</strong> Last 7 days with daily percentages, streak goal selector</li>
+                                <li><strong>▸ Habit Performance:</strong> Individual habit stats (7/30/90 day views), trophy for best performer</li>
+                            </ul>
+                        </div>
+                        <div class="preview-section">
+                            <strong>📅 Monthly Calendar Modal:</strong>
+                            <ul>
+                                <li><strong>Full Month Grid:</strong> Color-coded days (green = goal hit, yellow = partial, gray = no data)</li>
+                                <li><strong>Month Navigation:</strong> Browse past/future months with arrow buttons</li>
+                                <li><strong>Interactive:</strong> Click any past day to backfill data</li>
+                            </ul>
+                        </div>
+                        <div class="preview-section">
+                            <strong>🎨 Design Elements:</strong>
+                            <ul>
+                                <li><strong>Color Scheme:</strong> Dark background (#0f0f23) with neon green (#00ff88) and pink (#ff0080) accents</li>
+                                <li><strong>Typography:</strong> Outfit for body text, Space Mono for data/numbers</li>
+                                <li><strong>Animations:</strong> Smooth fade-ins, hover effects, progress ring animations</li>
+                                <li><strong>Theme:</strong> Cyberpunk/gaming aesthetic with "quest" metaphor</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="readme-section">
                     <h4>💡 Why We Built This</h4>
                     <p>Research consistently shows that habit tracking is one of the most effective tools for behavior change:</p>
                     <ul>
@@ -1783,9 +1942,9 @@
                     <ul class="research-links">
                         <li>📄 <a href="https://jamesclear.com/habit-tracker" target="_blank" rel="noopener noreferrer">The Science of Habit Tracking - James Clear</a></li>
                         <li>📄 <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6524446/" target="_blank" rel="noopener noreferrer">Self-Monitoring and Habit Formation - NCBI Research</a></li>
+                        <li>📄 <a href="https://www.verywellmind.com/how-to-form-new-habits-2795865" target="_blank" rel="noopener noreferrer">How Long Does It Take to Form a Habit? - Verywell Mind</a></li>
                         <li>🎥 <a href="https://www.youtube.com/watch?v=mNeXuCYiE0U" target="_blank" rel="noopener noreferrer">The Science of Habit Formation - YouTube (BetterThanYesterday)</a></li>
                         <li>🎥 <a href="https://www.youtube.com/watch?v=S5fHkPNhCMI" target="_blank" rel="noopener noreferrer">How to Track Your Habits - YouTube (Matt D'Avella)</a></li>
-                        <li>📄 <a href="https://www.verywellmind.com/how-to-form-new-habits-2795865" target="_blank" rel="noopener noreferrer">How Long Does It Take to Form a Habit? - Verywell Mind</a></li>
                         <li>📖 <strong>Book:</strong> "Atomic Habits" by James Clear - The definitive guide to habit formation</li>
                         <li>📖 <strong>Book:</strong> "The Power of Habit" by Charles Duhigg - Understanding the neuroscience of habits</li>
                         <li>📖 <strong>Book:</strong> "Tiny Habits" by BJ Fogg - The science of making small changes stick</li>
@@ -2292,6 +2451,33 @@
                 saveData();
                 renderHabits();
             }
+        }
+
+        // Add habit from suggestion
+        function addSuggestion(habitName) {
+            // Check if habit already exists
+            const exists = habits.some(h => h.name.toLowerCase() === habitName.toLowerCase());
+            if (exists) {
+                // Give visual feedback that it already exists
+                const input = document.getElementById('habitInput');
+                input.value = habitName;
+                input.focus();
+                setTimeout(() => {
+                    input.value = '';
+                }, 1500);
+                return;
+            }
+            
+            habits.push({ name: habitName, completed: false });
+            saveData();
+            renderHabits();
+            
+            // Visual feedback
+            const input = document.getElementById('habitInput');
+            input.value = `✓ Added "${habitName}"`;
+            setTimeout(() => {
+                input.value = '';
+            }, 1000);
         }
 
         // Toggle habit completion
