@@ -233,6 +233,15 @@
             animation: fadeIn 0.8s ease-out 0.3s both;
         }
 
+        .insight-icon-btn {
+            border-color: rgba(255, 217, 0, 0.4) !important;
+        }
+
+        .insight-icon-btn:hover {
+            border-color: var(--accent-warning) !important;
+            background: rgba(255, 217, 0, 0.1) !important;
+        }
+
         .progress-ring svg {
             transform: rotate(-90deg);
         }
@@ -1643,6 +1652,154 @@
             }
         }
 
+        /* ── Badges Section ─────────────────────────────────── */
+        .badges-section {
+            margin-top: 30px;
+            animation: fadeIn 0.8s ease-out 0.6s both;
+        }
+
+        .badges-subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .badge-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge-card.unlocked {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.06);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .badge-card.unlocked::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+        }
+
+        .badge-card.locked {
+            opacity: 0.4;
+            filter: grayscale(0.6);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .badge-info { flex: 1; min-width: 0; }
+
+        .badge-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .badge-card.unlocked .badge-name { color: var(--accent-primary); }
+
+        .badge-desc {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-status {
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* ── Insight Popup ──────────────────────────────────── */
+        .insight-modal-content {
+            max-width: 420px;
+            border-color: var(--accent-warning) !important;
+            box-shadow: 0 20px 60px rgba(255, 217, 0, 0.2) !important;
+        }
+
+        .insight-modal-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insight-bulb {
+            font-size: 1.5rem;
+        }
+
+        .insight-modal-label {
+            flex: 1;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-warning);
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .insight-modal-body {
+            padding: 24px 20px 16px;
+        }
+
+        .insight-modal-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+        }
+
+        .insight-modal-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        .insight-modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .insight-modal-footer .btn {
+            padding: 10px 18px;
+            font-size: 0.9rem;
+        }
+
         /* PWA Install Banner */
         #installBanner {
             position: fixed;
@@ -1758,6 +1915,10 @@
                 📅
                 <span class="calendar-tooltip">View Calendar</span>
             </button>
+            <button class="calendar-icon-btn insight-icon-btn" onclick="openInsightModal()" aria-label="Habit Insights">
+                💡
+                <span class="calendar-tooltip">Habit Insights</span>
+            </button>
         </div>
 
         <div class="stats-grid">
@@ -1842,6 +2003,17 @@
             </div>
         </div>
 
+        <div class="badges-section">
+            <h2 class="section-title collapsible-header" onclick="toggleSection('badgesSection')">
+                <span class="collapse-icon" id="badgesIcon">▸</span>
+                Achievements
+            </h2>
+            <div class="collapsible-content" id="badgesSection">
+                <p class="badges-subtitle">Complete challenges to unlock badges</p>
+                <div class="badges-grid" id="badgesGrid"></div>
+            </div>
+        </div>
+
         <footer class="footer">
             <div class="footer-content">
                 <p class="footer-tagline">⚡ Track. Complete. Level Up. ⚡</p>
@@ -1908,6 +2080,25 @@
                     </div>
                 </div>
                 <div id="calendarGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insight Popup Modal -->
+    <div id="insightModal" class="modal">
+        <div class="modal-content insight-modal-content">
+            <div class="insight-modal-header">
+                <span class="insight-bulb">💡</span>
+                <span class="insight-modal-label">HABIT INSIGHT</span>
+                <button class="modal-close" onclick="closeInsightModal()">✕</button>
+            </div>
+            <div class="insight-modal-body">
+                <p class="insight-modal-text" id="insightModalText"></p>
+                <div class="insight-modal-meta" id="insightModalMeta"></div>
+            </div>
+            <div class="insight-modal-footer">
+                <button class="btn btn-secondary" onclick="showNextInsight()">Next Insight ›</button>
+                <button class="btn" onclick="closeInsightModal()">Got it!</button>
             </div>
         </div>
     </div>
@@ -2606,6 +2797,8 @@
             habits[index].completed = !habits[index].completed;
             saveData();
             renderHabits();
+            renderBadges();
+            checkAndShowInsight();
         }
 
         // Delete habit
@@ -3018,6 +3211,267 @@
             } else {
                 section.classList.add('open');
                 icon.classList.add('open');
+                if (sectionId === 'badgesSection') renderBadges();
+            }
+        }
+
+        // ─── ACHIEVEMENT BADGES ───────────────────────────────────────
+        const BADGE_DEFINITIONS = [
+            {
+                id: 'first_habit',
+                icon: '🌱',
+                name: 'First Step',
+                desc: 'Add your first habit',
+                check: () => habits.length >= 1
+            },
+            {
+                id: 'on_fire',
+                icon: '🔥',
+                name: 'On Fire',
+                desc: '100% completion for 3 days',
+                check: () => {
+                    const d = getWeeklyData();
+                    const today = new Date();
+                    let count = 0;
+                    for (let i = 0; i < 30; i++) {
+                        const dt = new Date(today);
+                        dt.setDate(dt.getDate() - i);
+                        const entry = d[dt.toDateString()];
+                        if (entry && entry.percentage === 100) {
+                            count++;
+                            if (count >= 3) return true;
+                        } else {
+                            count = 0;
+                        }
+                    }
+                    return false;
+                }
+            },
+            {
+                id: 'warrior_7',
+                icon: '🏅',
+                name: '7-Day Warrior',
+                desc: '7-day streak',
+                check: () => calculateStreaks().currentStreak >= 7
+            },
+            {
+                id: 'diamond_30',
+                icon: '💎',
+                name: 'Diamond Habit',
+                desc: '30-day streak',
+                check: () => calculateStreaks().currentStreak >= 30
+            },
+            {
+                id: 'perfect_week',
+                icon: '⚡',
+                name: 'Perfect Week',
+                desc: '100% all 7 days this week',
+                check: () => {
+                    const d = getWeeklyData();
+                    const today = new Date();
+                    for (let i = 0; i < 7; i++) {
+                        const dt = new Date(today);
+                        dt.setDate(dt.getDate() - i);
+                        const entry = d[dt.toDateString()];
+                        if (!entry || entry.percentage < 100) return false;
+                    }
+                    return true;
+                }
+            },
+            {
+                id: 'habit_master',
+                icon: '📋',
+                name: 'Habit Master',
+                desc: 'Track 5+ habits at once',
+                check: () => habits.length >= 5
+            },
+            {
+                id: 'time_traveller',
+                icon: '🕰️',
+                name: 'Time Traveller',
+                desc: 'Backfill a past day',
+                check: () => Object.keys(getBackfillData()).length >= 1
+            },
+            {
+                id: 'consistent',
+                icon: '📈',
+                name: 'Consistent',
+                desc: 'Best streak of 10+ days',
+                check: () => calculateStreaks().bestStreak >= 10
+            }
+        ];
+
+        function renderBadges() {
+            const grid = document.getElementById('badgesGrid');
+            if (!grid) return;
+            grid.innerHTML = BADGE_DEFINITIONS.map(badge => {
+                const unlocked = badge.check();
+                return `
+                    <div class="badge-card ${unlocked ? 'unlocked' : 'locked'}">
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-info">
+                            <div class="badge-name">${badge.name}</div>
+                            <div class="badge-desc">${badge.desc}</div>
+                        </div>
+                        <div class="badge-status">${unlocked ? '✅' : '🔒'}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ─── HABIT INSIGHTS ───────────────────────────────────────────
+        let insightIndex = 0;
+        let currentInsights = [];
+
+        function generateInsights() {
+            const weeklyData = getWeeklyData();
+            const insights = [];
+            const today = new Date();
+            const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+            // Need at least 7 days of data for meaningful insights
+            const entries = Object.entries(weeklyData);
+            if (entries.length < 3 || habits.length === 0) return [];
+
+            // ── Day-of-week analysis ──
+            const dayTotals = Array(7).fill(0);
+            const dayCounts = Array(7).fill(0);
+            entries.forEach(([dateStr, data]) => {
+                if (data.total > 0) {
+                    const dow = new Date(dateStr).getDay();
+                    dayTotals[dow] += data.percentage;
+                    dayCounts[dow]++;
+                }
+            });
+
+            let worstDay = -1, worstPct = 101, bestDay = -1, bestPct = -1;
+            for (let i = 0; i < 7; i++) {
+                if (dayCounts[i] >= 2) {
+                    const avg = dayTotals[i] / dayCounts[i];
+                    if (avg < worstPct) { worstPct = avg; worstDay = i; }
+                    if (avg > bestPct) { bestPct = avg; bestDay = i; }
+                }
+            }
+
+            if (worstDay >= 0 && worstPct < 60) {
+                insights.push({
+                    text: `You tend to struggle on ${dayNames[worstDay]}s — try setting a smaller goal or a reminder for that day.`,
+                    meta: `${dayNames[worstDay]} average: ${Math.round(worstPct)}% completion`
+                });
+            }
+
+            if (bestDay >= 0 && bestPct > 70) {
+                insights.push({
+                    text: `${dayNames[bestDay]} is your strongest day — great momentum! Use that energy to prep for the week.`,
+                    meta: `${dayNames[bestDay]} average: ${Math.round(bestPct)}% completion`
+                });
+            }
+
+            // ── Streak insight ──
+            const { currentStreak, bestStreak } = calculateStreaks();
+            if (currentStreak >= 3) {
+                insights.push({
+                    text: `You're on a ${currentStreak}-day streak — don't break the chain! 🔥`,
+                    meta: `Your best ever: ${bestStreak} days`
+                });
+            } else if (currentStreak === 0 && bestStreak > 0) {
+                insights.push({
+                    text: `Your best streak was ${bestStreak} days — you've done it before, you can do it again!`,
+                    meta: `Start fresh today to rebuild momentum`
+                });
+            }
+
+            // ── Last 7 days trend ──
+            const last7 = [];
+            for (let i = 6; i >= 0; i--) {
+                const dt = new Date(today);
+                dt.setDate(dt.getDate() - i);
+                const entry = weeklyData[dt.toDateString()];
+                if (entry && entry.total > 0) last7.push(entry.percentage);
+            }
+            if (last7.length >= 4) {
+                const firstHalf = last7.slice(0, Math.floor(last7.length / 2));
+                const secondHalf = last7.slice(Math.floor(last7.length / 2));
+                const avg1 = firstHalf.reduce((a,b) => a+b, 0) / firstHalf.length;
+                const avg2 = secondHalf.reduce((a,b) => a+b, 0) / secondHalf.length;
+                if (avg2 - avg1 > 15) {
+                    insights.push({
+                        text: `You're trending upward this week — keep the momentum going! 📈`,
+                        meta: `Recent days avg: ${Math.round(avg2)}% vs earlier: ${Math.round(avg1)}%`
+                    });
+                } else if (avg1 - avg2 > 15) {
+                    insights.push({
+                        text: `Your completion rate has dipped lately. Try focusing on just 2-3 core habits today.`,
+                        meta: `Recent days avg: ${Math.round(avg2)}% vs earlier: ${Math.round(avg1)}%`
+                    });
+                }
+            }
+
+            // ── Habit-specific insight ──
+            const stats = calculateHabitStats();
+            const sorted = Object.entries(stats).sort((a,b) => a[1].percentage - b[1].percentage);
+            if (sorted.length > 0) {
+                const [worstHabit, worstStat] = sorted[0];
+                if (worstStat.percentage < 50 && worstStat.total >= 5) {
+                    insights.push({
+                        text: `"${worstHabit}" is your toughest habit. Consider breaking it into a smaller action to build the trigger.`,
+                        meta: `Completion rate: ${worstStat.percentage}% over ${worstStat.total} days`
+                    });
+                }
+                const [bestHabit, bestStat] = sorted[sorted.length - 1];
+                if (bestStat.percentage >= 80 && bestStat.total >= 5) {
+                    insights.push({
+                        text: `"${bestHabit}" is your strongest habit at ${bestStat.percentage}%! Use this as an anchor to stack new habits onto.`,
+                        meta: `Completion: ${bestStat.completed} of ${bestStat.total} days`
+                    });
+                }
+            }
+
+            // ── Motivational fallback ──
+            if (insights.length === 0) {
+                insights.push({
+                    text: `Keep going! It takes an average of 66 days to form a habit. Every check-in counts. 🌱`,
+                    meta: `Based on UCL research by Phillippa Lally`
+                });
+            }
+
+            return insights;
+        }
+
+        function openInsightModal() {
+            currentInsights = generateInsights();
+            if (currentInsights.length === 0) return;
+            insightIndex = 0;
+            displayInsight();
+            document.getElementById('insightModal').classList.add('active');
+        }
+
+        function displayInsight() {
+            const insight = currentInsights[insightIndex];
+            document.getElementById('insightModalText').textContent = insight.text;
+            document.getElementById('insightModalMeta').textContent = insight.meta;
+        }
+
+        function showNextInsight() {
+            insightIndex = (insightIndex + 1) % currentInsights.length;
+            displayInsight();
+        }
+
+        function closeInsightModal() {
+            document.getElementById('insightModal').classList.remove('active');
+        }
+
+        // Close insight on outside click
+        document.getElementById('insightModal').addEventListener('click', function(e) {
+            if (e.target === this) closeInsightModal();
+        });
+
+        // Show insight automatically when all habits are done for the day
+        function checkAndShowInsight() {
+            if (habits.length === 0) return;
+            const allDone = habits.every(h => h.completed);
+            if (allDone) {
+                setTimeout(openInsightModal, 800);
             }
         }
 
