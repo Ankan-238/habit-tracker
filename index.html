@@ -4,6 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Quest Tracker</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="Daily Quest Tracker">
+    <meta name="description" content="Gamified daily habit tracker. Track. Complete. Level Up.">
+    <meta name="theme-color" content="#0f0f23">
+    <meta name="background-color" content="#0f0f23">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DailyQuest">
+    <meta name="msapplication-TileColor" content="#0f0f23">
+
+    <!-- PWA Icons (inline SVG as data URIs) -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230f0f23'/><text x='96' y='130' font-size='110' text-anchor='middle'>⚡</text></svg>">
+
+    <!-- PWA Manifest (inline) -->
+    <link rel="manifest" href="data:application/manifest+json,{
+      %22name%22: %22Daily Quest Tracker%22,
+      %22short_name%22: %22DailyQuest%22,
+      %22description%22: %22Gamified daily habit tracker. Track. Complete. Level Up.%22,
+      %22start_url%22: %22.%22,
+      %22display%22: %22standalone%22,
+      %22background_color%22: %22%230f0f23%22,
+      %22theme_color%22: %22%230f0f23%22,
+      %22orientation%22: %22portrait%22,
+      %22icons%22: [
+        {
+          %22src%22: %22data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230f0f23'/><text x='96' y='130' font-size='110' text-anchor='middle'>⚡</text></svg>%22,
+          %22sizes%22: %22192x192%22,
+          %22type%22: %22image/svg+xml%22
+        }
+      ]
+    }">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -899,7 +932,8 @@
             font-size: 1.2rem;
         }
 
-        .calendar-controls {
+
+                .calendar-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -1608,6 +1642,93 @@
                 opacity: 0.6;
             }
         }
+
+        /* PWA Install Banner */
+        #installBanner {
+            position: fixed;
+            bottom: -120px;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            padding: 12px 16px;
+            transition: bottom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #installBanner.visible {
+            bottom: 0;
+        }
+
+        .install-banner-content {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-primary);
+            border-radius: 16px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 -4px 30px rgba(0, 255, 136, 0.2);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .install-banner-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .install-banner-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .install-banner-text strong {
+            color: var(--accent-primary);
+            font-size: 0.95rem;
+        }
+
+        .install-banner-text span {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .install-btn {
+            background: linear-gradient(135deg, var(--accent-primary), #00ddff);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 18px;
+            color: var(--bg-dark);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .install-dismiss {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .install-dismiss:hover {
+            background: rgba(255, 0, 128, 0.1);
+            color: var(--accent-secondary);
+        }
     </style>
 </head>
 <body>
@@ -1735,7 +1856,7 @@
                     <span class="footer-separator">•</span>
                     <a href="https://x.com/This_is_Ankan" target="_blank" rel="noopener noreferrer">X</a>
                     <span class="footer-separator">•</span>
-                    <a href="mailto:ankanhore238@gmail.com">Email</a>
+                    <a href="/cdn-cgi/l/email-protection#6b0a05000a050304190e5958532b0c060a020745080406">Email</a>
                 </p>
             </div>
         </footer>
@@ -2540,25 +2661,11 @@
             }
         });
 
-        // Toggle collapsible sections
-        function toggleSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            const icon = document.getElementById(sectionId.replace('Section', 'Icon'));
-            
-            if (section.classList.contains('open')) {
-                section.classList.remove('open');
-                icon.classList.remove('open');
-            } else {
-                section.classList.add('open');
-                icon.classList.add('open');
-            }
-        }
-
         // Change stats period
         function changeStatsPeriod(days) {
             statsPeriod = days;
             
-            // Update button states
+            // Update button states - only target stat period buttons
             document.querySelectorAll('.period-btn').forEach(btn => {
                 if (parseInt(btn.dataset.period) === days) {
                     btn.classList.add('active');
@@ -2901,6 +3008,19 @@
             }
         });
 
+        // Toggle collapsible sections
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const icon = document.getElementById(sectionId.replace('Section', 'Icon'));
+            if (section.classList.contains('open')) {
+                section.classList.remove('open');
+                icon.classList.remove('open');
+            } else {
+                section.classList.add('open');
+                icon.classList.add('open');
+            }
+        }
+
         // Initialize app
         updateDateDisplay();
         loadStreakThreshold();
@@ -2909,13 +3029,125 @@
         renderWeeklySummary();
         updateStreakDisplay();
         renderHabitStats();
-        
+
         // Update calendar legend with current threshold
         function updateCalendarLegend() {
             const legendText = document.querySelector('.calendar-legend .legend-item:first-child span');
             if (legendText) {
-                legendText.textContent = `Goal Hit (${streakThreshold}%+)`;
+                legendText.textContent = 'Goal Hit (' + streakThreshold + '%+)';
             }
+        }
+        updateCalendarLegend();
+
+        // ─── PWA SERVICE WORKER ───────────────────────────────────────
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE = 'dqt-v1';
+                const ASSETS = [self.location.href];
+
+                self.addEventListener('install', e => {
+                    e.waitUntil(
+                        caches.open(CACHE).then(cache => cache.addAll(ASSETS))
+                    );
+                    self.skipWaiting();
+                });
+
+                self.addEventListener('activate', e => {
+                    e.waitUntil(
+                        caches.keys().then(keys =>
+                            Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+                        )
+                    );
+                    self.clients.claim();
+                });
+
+                self.addEventListener('fetch', e => {
+                    e.respondWith(
+                        caches.match(e.request).then(cached => cached || fetch(e.request))
+                    );
+                });
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl).catch(() => {});
+        }
+
+        // ─── INSTALL PROMPT BANNER ───────────────────────────────────
+        let deferredPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallBanner();
+        });
+
+        function showInstallBanner() {
+            if (document.getElementById('installBanner')) return;
+            const banner = document.createElement('div');
+            banner.id = 'installBanner';
+            banner.innerHTML = `
+                <div class="install-banner-content">
+                    <span class="install-banner-icon">⚡</span>
+                    <div class="install-banner-text">
+                        <strong>Add to Home Screen</strong>
+                        <span>Install Daily Quest Tracker as an app</span>
+                    </div>
+                    <button class="install-btn" onclick="installApp()">Install</button>
+                    <button class="install-dismiss" onclick="dismissBanner()">✕</button>
+                </div>
+            `;
+            document.body.appendChild(banner);
+            setTimeout(() => banner.classList.add('visible'), 100);
+        }
+
+        function installApp() {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(() => {
+                deferredPrompt = null;
+                dismissBanner();
+            });
+        }
+
+        function dismissBanner() {
+            const banner = document.getElementById('installBanner');
+            if (banner) {
+                banner.classList.remove('visible');
+                setTimeout(() => banner.remove(), 400);
+            }
+        }
+
+        // iOS Safari - show manual instructions since it doesn't support beforeinstallprompt
+        function isIos() {
+            return /iphone|ipad|ipod/i.test(navigator.userAgent);
+        }
+        function isInStandaloneMode() {
+            return ('standalone' in navigator) && navigator.standalone;
+        }
+        if (isIos() && !isInStandaloneMode()) {
+            const shown = localStorage.getItem('ios-install-shown');
+            if (!shown) {
+                setTimeout(showIosBanner, 3000);
+                localStorage.setItem('ios-install-shown', '1');
+            }
+        }
+
+        function showIosBanner() {
+            if (document.getElementById('installBanner')) return;
+            const banner = document.createElement('div');
+            banner.id = 'installBanner';
+            banner.innerHTML = `
+                <div class="install-banner-content">
+                    <span class="install-banner-icon">⚡</span>
+                    <div class="install-banner-text">
+                        <strong>Add to Home Screen</strong>
+                        <span>Tap <strong>Share</strong> → <strong>Add to Home Screen</strong></span>
+                    </div>
+                    <button class="install-dismiss" onclick="dismissBanner()">✕</button>
+                </div>
+            `;
+            document.body.appendChild(banner);
+            setTimeout(() => banner.classList.add('visible'), 100);
         }
     </script>
 </body>
