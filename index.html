@@ -2123,6 +2123,7 @@
             color: var(--accent-secondary);
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -2368,7 +2369,8 @@
                     <div class="share-footer">dailyquesttracker.app</div>
                 </div>
                 <div class="share-actions">
-                    <button class="btn" onclick="downloadShareCard()">📥 Download Image</button>
+                    <button class="btn" onclick="downloadShareCard()">📥 Download</button>
+                    <button class="btn" onclick="shareNative()" id="nativeShareBtn" style="display:none">📤 Share</button>
                     <button class="btn btn-secondary" onclick="copyShareText()">📋 Copy Text</button>
                 </div>
             </div>
@@ -3862,8 +3864,96 @@
         }
 
         async function downloadShareCard() {
-            // Simple implementation: user can screenshot the card
-            alert('📸 Take a screenshot of the card above to share on Instagram, LinkedIn, or WhatsApp!\n\nTip: On most devices, press Volume Down + Power button.');
+            const card = document.getElementById('shareCard');
+            const downloadBtn = event.target;
+            const originalText = downloadBtn.textContent;
+            
+            try {
+                downloadBtn.textContent = '⏳ Generating...';
+                downloadBtn.disabled = true;
+                
+                // Use html2canvas to convert the card to image
+                const canvas = await html2canvas(card, {
+                    scale: 2,
+                    backgroundColor: '#1a1a35',
+                    logging: false
+                });
+                
+                // Convert to blob and download
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    const today = new Date().toISOString().split('T')[0];
+                    a.href = url;
+                    a.download = `DailyQuestTracker-${today}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    downloadBtn.textContent = '✅ Downloaded!';
+                    setTimeout(() => {
+                        downloadBtn.textContent = originalText;
+                        downloadBtn.disabled = false;
+                    }, 2000);
+                }, 'image/png');
+                
+            } catch (error) {
+                console.error('Error generating image:', error);
+                alert('Could not generate image. Please take a screenshot instead.');
+                downloadBtn.textContent = originalText;
+                downloadBtn.disabled = false;
+            }
+        }
+
+        async function shareNative() {
+            const card = document.getElementById('shareCard');
+            const btn = event.target;
+            const originalText = btn.textContent;
+            
+            try {
+                btn.textContent = '⏳ Generating...';
+                btn.disabled = true;
+                
+                const canvas = await html2canvas(card, {
+                    scale: 2,
+                    backgroundColor: '#1a1a35',
+                    logging: false
+                });
+                
+                canvas.toBlob(async function(blob) {
+                    const file = new File([blob], 'DailyQuestTracker.png', { type: 'image/png' });
+                    const shareData = {
+                        files: [file],
+                        title: 'My Daily Quest Progress',
+                        text: `🔥 ${calculateStreaks().currentStreak}-day streak on Daily Quest Tracker!`
+                    };
+                    
+                    if (navigator.canShare && navigator.canShare(shareData)) {
+                        await navigator.share(shareData);
+                        btn.textContent = '✅ Shared!';
+                    } else {
+                        // Fallback to download
+                        downloadShareCard();
+                    }
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }, 2000);
+                }, 'image/png');
+                
+            } catch (error) {
+                console.error('Share failed:', error);
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // Show native share button if supported
+        if (navigator.share && navigator.canShare) {
+            const nativeBtn = document.getElementById('nativeShareBtn');
+            if (nativeBtn) nativeBtn.style.display = 'inline-block';
         }
 
         document.getElementById('shareModal').addEventListener('click', function(e) {
