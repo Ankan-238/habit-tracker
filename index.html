@@ -56,6 +56,17 @@
             --border: #2a2a45;
         }
 
+        [data-theme="light"] {
+            --bg-dark: #f8f9fa;
+            --bg-card: #ffffff;
+            --accent-primary: #00b866;
+            --accent-secondary: #e6006f;
+            --accent-warning: #f5a623;
+            --text-primary: #1a1a2e;
+            --text-dim: #6b7280;
+            --border: #e5e7eb;
+        }
+
         body {
             font-family: 'Outfit', sans-serif;
             background: var(--bg-dark);
@@ -65,6 +76,13 @@
             background-image: 
                 radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(255, 0, 128, 0.03) 0%, transparent 50%);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        [data-theme="light"] body {
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 184, 102, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(230, 0, 111, 0.04) 0%, transparent 50%);
         }
 
         .container {
@@ -77,6 +95,34 @@
             text-align: center;
             margin-bottom: 40px;
             animation: slideDown 0.6s ease-out;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-primary);
+            transform: rotate(20deg) scale(1.05);
+        }
+
+        .theme-icon {
+            font-size: 1.4rem;
+            transition: transform 0.3s ease;
         }
 
         @keyframes slideDown {
@@ -418,6 +464,36 @@
 
         .habit-input input::placeholder {
             color: var(--text-dim);
+        }
+
+        .habit-category-select {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 12px;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .habit-category-select:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
+        }
+
+        .habit-category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+            opacity: 0.9;
         }
 
         .habit-suggestions {
@@ -1676,6 +1752,147 @@
             background: rgba(255, 215, 0, 0.1) !important;
         }
 
+        .share-icon-btn {
+            border-color: rgba(0, 184, 255, 0.4) !important;
+        }
+
+        .share-icon-btn:hover {
+            border-color: #00b8ff !important;
+            background: rgba(0, 184, 255, 0.1) !important;
+        }
+
+        /* ── Share Card Modal ───────────────────────────────────── */
+        .share-modal-content {
+            max-width: 480px;
+        }
+
+        .share-card {
+            background: linear-gradient(135deg, #1a1a35 0%, #0f0f23 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        [data-theme="light"] .share-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        }
+
+        .share-card-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .share-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+
+        .share-subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .share-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .share-stat-item {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .share-stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+
+        .share-stat-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-primary), #00ddff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .share-streak {
+            background: linear-gradient(135deg, #ff6b00, var(--accent-warning));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .share-weekly-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .share-day {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 4px;
+            text-align: center;
+        }
+
+        .share-day.goal {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .share-day-name {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .share-day-pct {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .share-footer {
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .share-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-actions .btn {
+            flex: 1;
+        }
+
         .badges-subtitle {
             font-family: 'Space Mono', monospace;
             font-size: 0.75rem;
@@ -1910,6 +2127,9 @@
 <body>
     <div class="container">
         <header>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                <span class="theme-icon" id="themeIcon">☀️</span>
+            </button>
             <h1>Daily Quest Tracker</h1>
             <p class="subtitle">Level Up Every Day</p>
         </header>
@@ -1920,6 +2140,10 @@
             <button class="calendar-icon-btn badges-icon-btn" onclick="openBadgesModal()" aria-label="Achievements">
                 🏆
                 <span class="calendar-tooltip">Achievements</span>
+            </button>
+            <button class="calendar-icon-btn share-icon-btn" onclick="openShareModal()" aria-label="Share Progress">
+                📤
+                <span class="calendar-tooltip">Share Progress</span>
             </button>
             <div class="progress-ring">
                 <svg width="120" height="120">
@@ -1969,6 +2193,13 @@
             <h2 class="section-title">Today's Quests</h2>
             <div class="habit-input">
                 <input type="text" id="habitInput" placeholder="Add a new habit..." maxlength="50">
+                <select id="habitCategory" class="habit-category-select">
+                    <option value="health">💪 Health</option>
+                    <option value="mind">🧠 Mind</option>
+                    <option value="work">💼 Work</option>
+                    <option value="social">👥 Social</option>
+                    <option value="other">⭐ Other</option>
+                </select>
                 <button class="btn" onclick="addHabit()">Add</button>
             </div>
             <div class="habit-suggestions" id="habitSuggestions">
@@ -2106,6 +2337,40 @@
             <div class="modal-body">
                 <p class="badges-subtitle">Complete challenges to unlock badges</p>
                 <div class="badges-grid" id="badgesGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Progress Modal -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content share-modal-content">
+            <div class="modal-header">
+                <h3>📤 Share Your Progress</h3>
+                <button class="modal-close" onclick="closeShareModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="share-card" id="shareCard">
+                    <div class="share-card-header">
+                        <h2 class="share-title">Daily Quest Tracker</h2>
+                        <p class="share-subtitle">Track. Complete. Level Up.</p>
+                    </div>
+                    <div class="share-stats">
+                        <div class="share-stat-item">
+                            <div class="share-stat-label">This Week</div>
+                            <div class="share-stat-value" id="shareWeekPct">0%</div>
+                        </div>
+                        <div class="share-stat-item">
+                            <div class="share-stat-label">Current Streak</div>
+                            <div class="share-stat-value share-streak" id="shareStreak">0🔥</div>
+                        </div>
+                    </div>
+                    <div class="share-weekly-grid" id="shareWeeklyGrid"></div>
+                    <div class="share-footer">dailyquesttracker.app</div>
+                </div>
+                <div class="share-actions">
+                    <button class="btn" onclick="downloadShareCard()">📥 Download Image</button>
+                    <button class="btn btn-secondary" onclick="copyShareText()">📋 Copy Text</button>
+                </div>
             </div>
         </div>
     </div>
@@ -2347,6 +2612,15 @@
         const BEST_STREAK_KEY = 'habit-tracker-best-streak';
         const HABIT_HISTORY_KEY = 'habit-tracker-habit-history';
         
+        // Habit Categories
+        const CATEGORIES = {
+            health: { name: 'Health', color: '#00ff88', icon: '💪' },
+            mind: { name: 'Mind', color: '#00ddff', icon: '🧠' },
+            work: { name: 'Work', color: '#ffd900', icon: '💼' },
+            social: { name: 'Social', color: '#ff0080', icon: '👥' },
+            other: { name: 'Other', color: '#8888aa', icon: '⭐' }
+        };
+        
         let habits = [];
         let currentDate = new Date().toDateString();
         let editingIndex = null;
@@ -2398,10 +2672,10 @@
                     
                     if (data.date !== currentDate) {
                         saveWeeklyData(data.date, data.habits);
-                        habits = data.habits.map(h => ({ name: h.name, completed: false }));
+                        habits = data.habits.map(h => ({ name: h.name, completed: false, category: h.category || 'other' }));
                         saveData();
                     } else {
-                        habits = data.habits;
+                        habits = data.habits.map(h => ({ ...h, category: h.category || 'other' }));
                     }
                 }
             } catch (e) {
@@ -2676,7 +2950,10 @@
                         <div class="habit-checkbox"></div>
                         ${isEditing 
                             ? `<input type="text" class="habit-name-input" data-index="${index}" value="${escapeHtml(habit.name)}" maxlength="50">`
-                            : `<div class="habit-name">${escapeHtml(habit.name)}</div>`
+                            : `<div class="habit-name">
+                                ${escapeHtml(habit.name)}
+                                ${habit.category ? `<span class="habit-category-badge" style="background: ${CATEGORIES[habit.category]?.color}20; color: ${CATEGORIES[habit.category]?.color};">${CATEGORIES[habit.category]?.icon} ${CATEGORIES[habit.category]?.name}</span>` : ''}
+                              </div>`
                         }
                         <div class="habit-actions">
                             ${isEditing 
@@ -2781,11 +3058,14 @@
         // Add new habit
         function addHabit() {
             const input = document.getElementById('habitInput');
+            const categorySelect = document.getElementById('habitCategory');
             const name = input.value.trim();
+            const category = categorySelect.value || 'other';
             
             if (name) {
-                habits.push({ name, completed: false });
+                habits.push({ name, completed: false, category });
                 input.value = '';
+                categorySelect.value = 'health'; // Reset to default
                 saveData();
                 renderHabits();
             }
@@ -2806,7 +3086,13 @@
                 return;
             }
             
-            habits.push({ name: habitName, completed: false });
+            // Auto-assign category
+            let category = 'other';
+            const lowerName = habitName.toLowerCase();
+            if (['workout', 'swim', 'walk', 'water', 'sleep'].some(w => lowerName.includes(w))) category = 'health';
+            else if (['read', 'journal', 'meditate', 'learn'].some(w => lowerName.includes(w))) category = 'mind';
+            
+            habits.push({ name: habitName, completed: false, category });
             saveData();
             renderHabits();
             
@@ -3515,7 +3801,92 @@
             }
         }
 
+        // ─── SHARE PROGRESS CARD ──────────────────────────────────────
+        function openShareModal() {
+            renderShareCard();
+            document.getElementById('shareModal').classList.add('active');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('active');
+        }
+
+        function renderShareCard() {
+            const weeklyData = getWeeklyData();
+            const today = new Date();
+            const { currentStreak } = calculateStreaks();
+            
+            // Calculate week average
+            let weekTotal = 0, weekCount = 0;
+            for (let i = 0; i < 7; i++) {
+                const dt = new Date(today);
+                dt.setDate(dt.getDate() - i);
+                const entry = weeklyData[dt.toDateString()];
+                if (entry && entry.total > 0) {
+                    weekTotal += entry.percentage;
+                    weekCount++;
+                }
+            }
+            const weekAvg = weekCount > 0 ? Math.round(weekTotal / weekCount) : 0;
+            
+            document.getElementById('shareWeekPct').textContent = weekAvg + '%';
+            document.getElementById('shareStreak').textContent = currentStreak + '🔥';
+            
+            // Render mini weekly grid
+            const grid = document.getElementById('shareWeeklyGrid');
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const dt = new Date(today);
+                dt.setDate(dt.getDate() - i);
+                const entry = weeklyData[dt.toDateString()];
+                const pct = entry ? entry.percentage : 0;
+                const dayName = dt.toLocaleDateString('en-US', { weekday: 'short' })[0];
+                const goalHit = pct >= streakThreshold;
+                days.push(`
+                    <div class="share-day ${goalHit ? 'goal' : ''}">
+                        <div class="share-day-name">${dayName}</div>
+                        <div class="share-day-pct">${pct}%</div>
+                    </div>
+                `);
+            }
+            grid.innerHTML = days.join('');
+        }
+
+        function copyShareText() {
+            const weekAvg = document.getElementById('shareWeekPct').textContent;
+            const streak = document.getElementById('shareStreak').textContent;
+            const text = `🎯 I hit ${weekAvg} completion this week on Daily Quest Tracker!\n🔥 Current streak: ${streak}\n\nTrack. Complete. Level Up. ⚡`;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard! Share it anywhere 🚀');
+            });
+        }
+
+        async function downloadShareCard() {
+            // Simple implementation: user can screenshot the card
+            alert('📸 Take a screenshot of the card above to share on Instagram, LinkedIn, or WhatsApp!\n\nTip: On most devices, press Volume Down + Power button.');
+        }
+
+        document.getElementById('shareModal').addEventListener('click', function(e) {
+            if (e.target === this) closeShareModal();
+        });
+
+        // ─── THEME TOGGLE ─────────────────────────────────────────────
+        function loadTheme() {
+            const saved = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+            document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('theme', next);
+        }
+
         // Initialize app
+        loadTheme();
         updateDateDisplay();
         loadStreakThreshold();
         loadData();
